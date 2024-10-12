@@ -1,0 +1,223 @@
+body {
+  background-color: rgb(0, 0, 0);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+
+.sidebar {
+  width: 250px;
+  background-color: rgba(149, 40, 136, 0.408); 
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 400px; 
+  position: absolute; 
+  top: 0;
+  left: 0;
+  border-radius: 0 20px 20px 0; 
+  overflow: auto; 
+}
+
+.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color: rgba(111, 7, 99, 0.408); /* Cambio de color en hover */
+}
+
+
+.main-content {
+  margin-left: 270px; 
+  padding: 20px;
+}
+
+
+h1 {
+  text-align: center;
+  font-size: 3rem; 
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+h3 {
+  color: beige;
+  background-color: rgba(111, 7, 99, 0.408);
+  text-align: center;
+  border-radius: 30px;
+  padding: 10px;
+  width: 80%;
+  margin: 0 auto; 
+  margin-bottom: 20px; 
+}
+
+
+h4 {
+  text-align: center;
+  color: beige;
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
+
+
+.canciones {
+  text-align: center;
+  color: beige;
+  background-color: rgba(111, 7, 99, 0.408);
+  border-radius: 30px;
+  padding: 10px;
+  width: 200px;
+  position: absolute; 
+  top: 80px; 
+  right: 20px; 
+  z-index: 1000; 
+}
+
+.canciones button {
+  background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.albums {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+
+.album {
+  background-color: rgba(149, 40, 136, 0.408);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  padding: 10px;
+  transition: background-color 0.3s;
+  margin: 10px;
+  width: 250px; 
+  position: relative;
+  transition: transform 0.3s ease; /* Añadir una transición suave */
+  
+}
+
+.album:hover {
+  transform: scale(1.05); /* Aumentar el tamaño un 5% al pasar el mouse */
+}
+
+.album img {
+  width: 100%;
+  height: auto;
+  border-bottom: 2px solid #444;
+  
+}
+
+.album h4 {
+  margin: 10px 0;
+  font-size: 1.25rem;
+}
+
+.album p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-button,
+.select-button {
+  background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover,
+.select-button:hover {
+  background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d);
+}
+
+.action-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.action-buttons button a {
+  color: white;
+  text-decoration: none;
+}
+
+.action-buttons button:hover {
+  background: linear-gradient(90deg, #6e55d3, #d453b6, #db7a40, #e2bf0d); /* Cambia el color al hacer hover */
+}
+
+.action-buttons button:active {
+  transform: scale(0.98); 
+}
+
+.arrow-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.favorite-icon {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #ccc; /* Color del ícono vacío */
+}
+
+.favorite-icon.active {
+  color: yellow; /* Color del ícono cuando es favorito */
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+
+

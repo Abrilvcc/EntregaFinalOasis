@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="AddStyle.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Añadir Canción</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="bg-black text-white">
+
+    <!-- Título en la parte superior -->
+    <header class="bg-black p-4 text-center">
+        <a href="index.html"><h1 class="text-5xl text-white font-bold">Oasis</h1></a>
+    </header>
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto p-4 flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-custom p-4 rounded-lg shadow-lg max-w-xs">
+            <div class="user-info mb-6">
+                <img src="liamandnoel.jpg" alt="Ícono de la banda" class="w-full rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-center">LiamAndNoel</h2>
+            </div>
+
+            <!-- Secciones de la sidebar -->
+            <div class="section mb-4">
+                <a href="index.html" class="block py-2 px-4 rounded hover:bg-pink-900">Other Albums</a>
+            </div>
+            <div class="section mb-4">
+                <a href="EditAlbum.html" class="block py-2 px-4 rounded hover:bg-purple-600">Edit Album</a>
+            </div>
+            <div class="section mb-4">
+                <a href="AddSongs.html" class="block py-2 px-4 rounded hover:bg-purple-600">Add Songs</a>
+            </div>
+            <div class="section mb-4">
+                <a href="Login.html" class="block py-2 px-4 rounded hover:bg-purple-600">Log out</a>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="custom-bg p-6 rounded-lg shadow-lg max-w-lg w-full ml-40">
+            <h2 class="text-3xl text-white font-semibold mb-6 text-center">Añadir Canción</h2>
+
+            <form id="addSongForm" action="/guardar-cancion" method="POST">
+                <!-- Campo para el título de la canción -->
+                <div class="mb-4">
+                    <label for="titulo" class="block text-white text-sm font-medium">Título de la Canción</label>
+                    <input type="text" id="titulo" name="titulo" class="w-full mt-2 text-white p-2 border rounded-md custom-bg focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="Título de la canción" required>
+                </div>
+
+                <!-- Campo para la duración de la canción -->
+                <div class="mb-4">
+                    <label for="duracion" class="block text-white text-sm font-medium">Duración</label>
+                    <input type="text" id="duracion" name="duracion" class="w-full text-white mt-2 p-2 border rounded-md custom-bg-purple focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="Duración en formato MM:SS" required>
+                </div>
+
+                <!-- Campo para el enlace de YouTube -->
+                <div class="mb-4">
+                    <label for="youtube" class="block text-white text-sm font-medium">Enlace de YouTube</label>
+                    <input type="url" id="youtube" name="youtube" class="w-full text-white mt-2 p-2 border rounded-md custom-bg-purple focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="https://youtube.com/enlace-cancion">
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="flex justify-between mt-7">
+                    <!-- Botón para añadir la canción -->
+                    <button type="submit" class="custom-bg-colores hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md">Añadir Canción</button>
+
+                    <!-- Botón para cancelar, redirecciona a la vista del álbum -->
+                    <a href="/album-vista" class="custom-bg-colores hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="text-white py-6 mt-6">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between mb-6">
+                <!-- redes -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Follow Oasis on:</h4>
+                    <ul>
+                        <li><a href="https://www.instagram.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-instagram mr-2"></i> Instagram</a></li>
+                        <li><a href="https://www.tiktok.com/@oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-tiktok mr-2"></i> TikTok</a></li>
+                        <li><a href="https://twitter.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-twitter mr-2"></i> Twitter</a></li>
+                        <li><a href="https://www.facebook.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-facebook mr-2"></i> Facebook</a></li>
+                        <li><a href="https://www.youtube.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-youtube mr-2"></i> YouTube</a></li>
+                    </ul>
+                </div>
+    
+                <!-- mas -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Elsewhere:</h4>
+                    <ul>
+                        <li><a href="https://noelgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Noel Gallagher</a></li>
+                        <li><a href="https://liamgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Liam Gallagher</a></li>
+                        <li><a href="https://www.setlist.fm" target="_blank" class="hover:underline flex items-center"><i class="fas fa-list-alt mr-2"></i> Oasis Setlists</a></li>
+                        <li><a href="https://stopcryingyourheartout.co.uk" target="_blank" class="hover:underline flex items-center"><i class="fas fa-heart mr-2"></i> Fan Site</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="AddSong.js"></script> <!-- Vínculo al archivo JavaScript -->
+</body>
+</html>

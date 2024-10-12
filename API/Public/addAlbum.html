@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>AddAlbum</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    
+    <a href="index.html" class="title-link">
+        <h1 class="text-5xl text-white  font-bold">Oasis</h1>
+    </a>
+
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="user-info">
+            <img src="liamandnoel.jpg" alt="Ícono de la banda">
+            <h2>LiamAndNoel</h2>
+        </div>
+
+        <!-- Secciones de la sidebar -->
+        <div class="section">
+            <div>
+                <a href="index.html">Other Albums</a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div>
+                <a href="EditAlbum.html">Edit Album</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div>
+                <a href="AddSongs.html">Add Songs</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div>
+                <a href="Login.html">Log out</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-container">
+        <form class="formulario" action="" method="post">
+            <input class="controls" type="text" name="titulo" value="" placeholder="titulo" required>
+<br>
+<br>
+<input class="controls" type="number" name="año" value="" placeholder="año de lanzamiento" required>
+<br>
+
+<label for="consultas"></label>
+<textarea class="consultas" id="descripción" rows="30" cols="40" placeholder="Dejanos tu descripción"required></textarea>
+<label for="imagen"></label>
+<input class="imagen" type="url" id="imagen" name="imagen" placeholder="Ingresa la URL de la imagen" required><br>
+<br>
+ <input class="button" type="submit" value="Add Album">
+        </form>
+    </div>
+</div>
+
+<footer class="bg-fuchsia-950 text-white py-6 mt-6">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between mb-6">
+            <!-- Social Media -->
+            <div>
+                <h4 class="text-xl font-bold mb-2">Follow Oasis on:</h4>
+                <ul>
+                    <li><a href="https://www.instagram.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-instagram mr-2"></i> Instagram</a></li>
+                    <li><a href="https://www.tiktok.com/@oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-tiktok mr-2"></i> TikTok</a></li>
+                    <li><a href="https://twitter.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-twitter mr-2"></i> Twitter</a></li>
+                    <li><a href="https://www.facebook.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-facebook mr-2"></i> Facebook</a></li>
+                    <li><a href="https://www.youtube.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-youtube mr-2"></i> YouTube</a></li>
+                </ul>
+            </div>
+
+            <!-- Elsewhere -->
+            <div>
+                <h4 class="text-xl font-bold mb-2">Elsewhere:</h4>
+                <ul>
+                    <li><a href="https://noelgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Noel Gallagher</a></li>
+                    <li><a href="https://liamgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Liam Gallagher</a></li>
+                    <li><a href="https://www.setlist.fm" target="_blank" class="hover:underline flex items-center"><i class="fas fa-list-alt mr-2"></i> Oasis Setlists</a></li>
+                    <li><a href="https://stopcryingyourheartout.co.uk" target="_blank" class="hover:underline flex items-center"><i class="fas fa-heart mr-2"></i> Fan Site</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

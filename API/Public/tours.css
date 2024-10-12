@@ -1,0 +1,64 @@
+body {
+  background-image: url(wallpaperr.jpg);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.title-link {
+  text-decoration: none; /* Elimina el subrayado del enlace */
+  outline: none; /* Elimina el borde al hacer clic */
+}
+
+.title-link:focus {
+  outline: none; /* Elimina el borde al enfocar el enlace con teclado */
+}
+
+
+
+
+
+
+
+.sidebar {
+  width: 250px;
+  background-color: rgba(149, 40, 136, 0.80);
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 200px;
+  position: fixed; /* Cambié a fixed para que esté siempre visible a la izquierda */
+  top: 20px; /* Ajusta este valor para mover hacia abajo */
+  left: 20px; /* Ajusta este valor para mover hacia la izquierda */
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.sidebar h2 {
+  color: #fff;
+  font-size: 20px;
+}
+
+.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color:rgba(149, 40, 136, 0.408)
+}
+
+.main-content {
+  margin-left: 290px; /* Deja espacio para el sidebar */
+  padding: 20px;
+}
+
+.custom-bg {background-color: rgb(111, 7, 99);} 
+
+
+
+ 
