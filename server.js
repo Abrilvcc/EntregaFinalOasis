@@ -5,11 +5,10 @@ const userRoutes = require('./routes/user'); // Asegúrate de importar el archiv
 const path = require("path");
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-console.log(process.env)
-const app = express();
 
-// URL de conexión a MongoDB
-const URL = 'mongodb+srv://abrilvictoria:wMySCPvEGOpzucir@platafdisco.6le6w.mongodb.net/?retryWrites=true&w=majority&appName=PlatafDisco';
+console.log(process.env.DATABASE_URL); 
+const app = express();
+const url = process.env.DATABASE_URL; 
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -24,7 +23,7 @@ app.use('/user', userRoutes); // Asegúrate de usar el router de usuarios aquí
 // Función para conectar a MongoDB
 const connectToMongo = async () => {
     try {
-        await mongoose.connect(URL);
+        await mongoose.connect(url); // Aquí cambiamos `URL` por `url`
         console.log('Conectado a la base de datos');
 
         app.listen(5000, () => {
@@ -43,4 +42,3 @@ app.use((err, req, res, next) => {
 
 // Llama a la función de conexión a MongoDB
 connectToMongo();
-
