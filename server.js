@@ -5,6 +5,7 @@ const userRoutes = require('./routes/user'); // Asegúrate de importar el archiv
 const path = require("path");
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+console.log(process.env)
 const app = express();
 
 // URL de conexión a MongoDB
@@ -43,8 +44,3 @@ app.use((err, req, res, next) => {
 // Llama a la función de conexión a MongoDB
 connectToMongo();
 
-
-
-//wMySCPvEGOpzucir
-
-//  mongodb+srv://abrilvictoria:wMySCPvEGOpzucir@platafdisco.6le6w.mongodb.net/?retryWrites=true&w=majority&appName=PlatafDisco
