@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser'); // Importa cookie-parser
 const verifyToken = require('../middleware/auth'); 
 
 const router = express.Router();
-const secret = "1234";
+const secret = process.env.SECRET_KEY;
 
 // Middleware para parsear cookies
 router.use(cookieParser()); // Agrega este middleware

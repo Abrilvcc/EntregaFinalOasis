@@ -9,7 +9,8 @@ require('dotenv').config();
 console.log(process.env.DATABASE_URL); 
 const app = express();
 const url = process.env.DATABASE_URL; 
-
+const secret = process.env.SECRET_KEY;
+console.log(process.env.SECRET_KEY)
 // Middleware para parsear JSON
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "Public"))); 
