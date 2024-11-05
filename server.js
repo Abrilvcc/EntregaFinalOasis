@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const routes = require('./routes/index'); // Importa el archivo de rutas principal
-const userRoutes = require('./routes/user'); // Asegúrate de importar el archivo de rutas de usuario
+const routes = require('./routes/index'); 
+const userRoutes = require('./routes/user'); 
 const path = require("path");
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
@@ -12,18 +12,18 @@ const url = process.env.DATABASE_URL;
 
 // Middleware para parsear JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "Public"))); // Sirve archivos estáticos desde la carpeta Public
+app.use(express.static(path.join(__dirname, "Public"))); 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
-app.use('/', routes); // Usa el router definido en routes/index.js
-app.use('/user', userRoutes); // Asegúrate de usar el router de usuarios aquí
+app.use('/', routes); 
+app.use('/user', userRoutes); 
 
 // Función para conectar a MongoDB
 const connectToMongo = async () => {
     try {
-        await mongoose.connect(url); // Aquí cambiamos `URL` por `url`
+        await mongoose.connect(url); 
         console.log('Conectado a la base de datos');
 
         app.listen(5000, () => {
