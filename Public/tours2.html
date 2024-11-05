@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="tailwind.config.js">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="tours.js" defer></script>
+</head>
+
+<body class="bg-black text-white">
+    <!-- Sidebar (Barra de navegación superior) -->
+    <nav class="bg-gray-900 w-full p-4 flex justify-between">
+        <ul class="flex space-x-4">
+            <li><a href="index.html" class="text-gray-400 hover:text-purple-400">Inicio</a></li>
+            <li><a href="todosLOSalbums.html" class="text-gray-400 hover:text-purple-400">Álbumes</a></li>
+            <li><a href="noticias.html" class="text-gray-400 hover:text-purple-400">Noticias</a></li>
+        </ul>
+        <ul class="flex space-x-4">
+            <a id="login-link" href="Login.html" class="text-white hover:text-purple-400 mr-4">Login</a>
+            <a id="register-link" href="signUp.html" class="text-white hover:text-purple-400">Registrar</a>
+            <button id="logout-button" class="text-white hover:text-purple-400 hidden">Logout</button>
+        </ul>
+    </nav>
+
+    <!-- Span donde se mostrará el mensaje personalizado -->
+    <p id="welcome-message" class="text-white text-center mt-4">Bienvenido a nuestra página de tours :</p>
+    <span id="welcome" class="text-center block"></span>
+
+    <!-- Contenido principal -->
+    <main class="p-6">
+        <h2 class="text-3xl font-bold mb-6 text-purple-400">Tickets</h2>
+        <section class="tours mb-24">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tour 1 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg transform transition hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-semibold mb-2">Tour 2024</h3>
+                    <p class="text-gray-400 mb-4">Fecha: 12 de diciembre de 2024</p>
+                    <p class="text-gray-400 mb-4">Buenos Aires</p>
+                    <button id="ticket-button-1" onclick="venderTicket(true, 'Buenos Aires')" class="bg-purple-400 text-black rounded-lg px-4 py-2 hover:bg-purple-500">
+                        Adquirir Tickets
+                    </button>
+                </div>
+
+                <!-- Tour 2 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg transform transition hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-semibold mb-2">Tour Primavera 2025</h3>
+                    <p class="text-gray-400 mb-4">Fecha: 5 de marzo de 2025</p>
+                    <p class="text-gray-400 mb-4">Lugar: Brasil</p>
+                    <button id="ticket-button-2" onclick="venderTicket(true, 'Brasil')" class="bg-purple-400 text-black rounded-lg px-4 py-2 hover:bg-purple-500">
+                        Adquirir Tickets
+                    </button>
+                </div>
+
+                <!-- Tour 3 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg transform transition hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-semibold mb-2">Gira de Verano 2025</h3>
+                    <p class="text-gray-400 mb-4">Fecha: 20 de junio de 2025</p>
+                    <p class="text-gray-400 mb-4">Lugar: Madrid</p>
+                    <button id="ticket-button-3" onclick="venderTicket(true, 'Madrid')" class="bg-purple-400 text-black rounded-lg px-4 py-2 hover:bg-purple-500">
+                        Adquirir Tickets
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black text-white py-6 mt-6">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between mb-6">
+                <!-- Social Media -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Follow Oasis on:</h4>
+                    <ul>
+                        <li><a href="https://www.instagram.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-instagram mr-2"></i> Instagram</a></li>
+                        <li><a href="https://www.tiktok.com/@oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-tiktok mr-2"></i> TikTok</a></li>
+                        <li><a href="https://twitter.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-twitter mr-2"></i> Twitter</a></li>
+                        <li><a href="https://www.facebook.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-facebook mr-2"></i> Facebook</a></li>
+                        <li><a href="https://www.youtube.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-youtube mr-2"></i> YouTube</a></li>
+                    </ul>
+                </div>
+      
+                <!-- Elsewhere -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Elsewhere:</h4>
+                    <ul>
+                        <li><a href="https://noelgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Noel Gallagher</a></li>
+                        <li><a href="https://liamgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Liam Gallagher</a></li>
+                        <li><a href="https://www.setlist.fm" target="_blank" class="hover:underline flex items-center"><i class="fas fa-list-alt mr-2"></i> Oasis Setlists</a></li>
+                        <li><a href="https://stopcryingyourheartout.co.uk" target="_blank" class="hover:underline flex items-center"><i class="fas fa-heart mr-2"></i> Fan Site</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="auth.js" defer></script>
+</body>
+</html>

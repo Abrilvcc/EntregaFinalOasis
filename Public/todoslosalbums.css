@@ -1,0 +1,22 @@
+/* Asegúrate de que la sidebar y la lista de canciones tengan el mismo color de fondo */
+.sidebar {
+    background-color: #2d3748; /* Color de fondo de la sidebar */
+}
+
+/* Cambia el fondo de la lista de canciones */
+#song-list {
+    background-color: #2d3748; /* Color de fondo para las canciones */
+    padding: 10px; /* Espacio alrededor */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Agregar efectos de hover para cada canción */
+#song-list li {
+    padding: 5px; /* Espacio dentro de cada canción */
+    transition: background-color 0.3s ease; /* Suaviza el efecto de hover */
+}
+
+#song-list li:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Cambia el fondo al pasar el mouse */
+    color: #fff; /* Cambia el color del texto al pasar el mouse */
+}

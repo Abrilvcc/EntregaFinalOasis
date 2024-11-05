@@ -1,0 +1,77 @@
+body {
+  background-color: black;
+}
+
+.login {
+  width: 350px; /* Ajusta el ancho */
+  height: auto; /* Permite que el alto se ajuste */
+  background: #1a1a1a; /* Cambia el fondo a un gris oscuro */
+  margin: auto;
+  margin-top: 50px; /* Reduce el margen superior */
+  padding: 20px 30px;
+  border-radius: 8px; /* Agrega un radio de borde */
+  box-shadow: 7px 13px 37px rgba(134, 110, 231, 0.6); /* Cambia el color del sombra */
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.login h5 {
+  margin: 0;
+  text-align: center;
+  font-size: 22px; /* Aumenta el tamaño del título */
+  margin-bottom: 20px; /* Ajusta el espaciado */
+}
+
+.control {
+  width: 100%;
+  border: 1px solid rgba(149, 40, 136, 0.408);
+  margin-bottom: 15px;
+  padding: 10px; 
+  background: rgba(134, 110, 231, 0.2); /* Fondo con un tono púrpura claro */
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  border-radius: 4px; /* Agrega radio a los bordes */
+}
+
+.reg {
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d);
+  font-style: italic;
+  padding: 10px;
+  border: none;
+  color: white;
+  margin-top: 20px; /* Ajusta el margen superior */
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px; /* Agrega un radio de borde */
+}
+
+.miembro {
+  text-align: center;
+  margin-top: 15px; /* Ajusta el margen */
+}
+
+.text-purple-400 {
+  color: #a855f7; /* Color para el enlace de registro */
+}
+.reg {
+  width: 100%;
+  height: 50px; /* Aumenta la altura para hacerlo más prominente */
+  background: linear-gradient(90deg, #866ee7, #ea60da); /* Cambia el gradiente para un tono más puro */
+  font-style: italic;
+  padding: 10px;
+  border: none;
+  color: white;
+  margin-top: 20px; /* Ajusta el margen superior */
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px; /* Asegúrate de que tenga bordes redondeados */
+  transition: background-color 0.3s, transform 0.3s; /* Efecto de transición */
+}
+
+.reg:hover {
+  background: linear-gradient(90deg, #ea60da, #866ee7); /* Cambia el orden del gradiente al pasar el ratón */
+  transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleSign.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Formulario de Registro</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="bg-black flex flex-col min-h-screen">
+    <!-- Título -->
+    <header class="flex justify-center mt-2"> 
+        <a href="index.html" class="title-link">
+            <h1 class="bg-black text-white text-5xl font-bold px-6 py-2 rounded-lg text-center">Oasis</h1>
+        </a>
+    </header>
+
+    <!-- Contenedor del Formulario de Registro -->
+    <section class="flex flex-grow items-center justify-center px-6">
+        <div class="flex items-center max-w-4xl bg-gray-800 p-8 rounded-lg shadow-lg space-x-12">
+            <!-- Formulario -->
+            <form id="signUpForm" class="space-y-6 w-full max-w-md">
+                <h4 class="text-center text-2xl text-white font-bold">Formulario de Registro</h4>
+                <input class="controls w-full p-3 rounded-md border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400" type="text" name="nombre" id="nombre" placeholder="Ingrese su nombre" required>
+                <input class="controls w-full p-3 rounded-md border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400" type="text" name="apellido" id="apellido" placeholder="Ingrese su apellido" required>
+                <input class="controls w-full p-3 rounded-md border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400" type="email" name="email" id="correo" placeholder="Ingrese su correo electrónico" required>
+                <input class="controls w-full p-3 rounded-md border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400" type="password" name="contraseña" id="password" placeholder="Ingrese su contraseña" required>
+                <input class="reg w-full h-12 text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-md cursor-pointer transition-transform transform hover:scale-105" type="submit" value="Registrar">
+            </form>
+
+            <!-- Frase -->
+            <div class="hidden md:block w-1/2 text-white text-3xl font-semibold text-center px-6">
+                <p>Únete a la comunidad de fans de Oasis y accede a contenido exclusivo, noticias y mucho más. ¡Regístrate hoy y vive la experiencia al máximo!</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-6">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between mb-6">
+                <!-- Social Media -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Follow Oasis on:</h4>
+                    <ul>
+                        <li><a href="https://www.instagram.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-instagram mr-2"></i> Instagram</a></li>
+                        <li><a href="https://www.tiktok.com/@oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-tiktok mr-2"></i> TikTok</a></li>
+                        <li><a href="https://twitter.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-twitter mr-2"></i> Twitter</a></li>
+                        <li><a href="https://www.facebook.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-facebook mr-2"></i> Facebook</a></li>
+                        <li><a href="https://www.youtube.com/oasis" target="_blank" class="hover:underline flex items-center"><i class="fab fa-youtube mr-2"></i> YouTube</a></li>
+                    </ul>
+                </div>
+
+                <!-- Elsewhere -->
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Elsewhere:</h4>
+                    <ul>
+                        <li><a href="https://noelgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Noel Gallagher</a></li>
+                        <li><a href="https://liamgallagher.com" target="_blank" class="hover:underline flex items-center"><i class="fas fa-globe mr-2"></i> Liam Gallagher</a></li>
+                        <li><a href="https://www.setlist.fm" target="_blank" class="hover:underline flex items-center"><i class="fas fa-list-alt mr-2"></i> Oasis Setlists</a></li>
+                        <li><a href="https://stopcryingyourheartout.co.uk" target="_blank" class="hover:underline flex items-center"><i class="fas fa-heart mr-2"></i> Fan Site</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="signUp.js" defer></script> 
+    <script src="auth.js"></script>
+</body>
+</html>

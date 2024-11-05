@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Proyecto - Álbumes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
+</head>
+<body class="bg-black text-white">
+
+    <!-- Barra de navegación -->
+    <nav class="relative">
+        <div class="flex justify-between items-center p-4">
+            <div class="text-lg">
+                <a href="index.html" class="hover:text-purple-300 transition-colors duration-300">OASIS</a>
+            </div>
+            <div class="absolute right-4 space-x-4">
+                <a id="login-link" href="Login.html" class="text-white hover:text-purple-400 mr-4">Login</a>
+        <a id="register-link" href="signUp.html" class="text-white hover:text-purple-400">Registrar</a>
+        <button id="logout-button" class="text-white hover:text-purple-400 hidden">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Título centrado -->
+    <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white">
+            <a href="index.html" class="hover:text-purple-300 transition-colors duration-300">OASIS</a>
+        </h1>
+    </header>
+
+    <!-- Mensaje de bienvenida -->
+    <div class="text-center mb-6">
+        <p class="text-lg">¡Bienvenido a la sección de Álbumes! Explora, agrega y edita tus álbumes favoritos.</p>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 h-full fixed top-0 left-0">
+        <div class="p-4 flex flex-col items-center">
+            <!-- Imagen de usuario -->
+            <img src="liamandnoel.jpg" alt="Usuario" class="w-16 h-16 rounded-full mb-4">
+            <h2 class="text-xl mb-2">LiamAndNoelFan</h2> <!-- Nombre del usuario -->
+            <h1 class="text-2xl mb-4">Álbumes Creados</h1>
+            <button onclick="openAddAlbumModal()" class="bg-purple-600 text-white px-4 py-2 rounded mb-4">Agregar Álbum</button>
+            <ul id="album-list">
+                <li class="album-item mb-4 flex justify-between items-center">
+                    Álbum 1
+                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
+                </li>
+                <li class="album-item mb-4 flex justify-between items-center">
+                    Álbum 2
+                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
+                </li>
+                <li class="album-item mb-4 flex justify-between items-center">
+                    Álbum 3
+                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
+                </li>
+            </ul>
+            
+        </div>
+    </aside>
+
+    <main class="ml-64 p-4">
+        <h2 class="text-3xl mb-4"></h2>
+        <h3 id="album-title" class="text-2xl mb-8"></h3>
+        <p id="album-description" class="mb-4"></p>
+        <img id="album-image" class="mb-4" src="" alt="Imagen del álbum" />
+        <div class="flex space-x-2">
+            <button id="add-song-btn" class="bg-purple-600 text-white px-4 py-2 rounded hidden" onclick="openAddSongModal()">Agregar Canción</button>
+            <button id="show-songs-btn" class="bg-blue-600 text-white px-4 py-2 rounded hidden" id="show-songs-btn">Canciones</button> <!-- Se ha eliminado 'onclick' -->
+            <button id="edit-album-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hidden" onclick="showEditDialog()">Editar Álbum</button>
+            <button id="delete-album-btn" class="bg-red-600 text-white px-4 py-2 rounded hidden" onclick="confirmDeleteAlbum()">Eliminar Álbum</button>
+        </div>
+        
+        <script>
+            // Agregar Event Listener al botón de "Canciones"
+            document.getElementById('show-songs-btn').addEventListener('click', function() {
+                window.location.href = "https://open.spotify.com/intl-es/artist/2DaxqgrOhkeH0fpeiQq2f4";
+            });
+        </script>
+        
+        </script>
+        
+        <!-- Contenedor para las canciones del álbum -->
+        <div id="songscontainer" class="mt-6">
+            <h3 class="text-2xl mb-4">Canciones del Álbum</h3>
+            <ul id="song-list" class="list-disc pl-7 space-y-5">
+                <!-- La lista de canciones se cargará aquí -->
+            </ul>
+        </div>
+    </main>
+</body>
+</html>
+
+    
+    <!-- Modal para editar álbum -->
+    <dialog id="albumModal" class="bg-gray-800 p-6 rounded-lg">
+        <h3 class="text-xl mb-2">Editar Álbum</h3>
+        <form id="album-edit-form" onsubmit="updateAlbum(event)">
+            <input type="text" id="edit-album-title" class="bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" placeholder="Título del Álbum" required>
+            <textarea id="edit-album-description" class="bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" placeholder="Descripción del Álbum" required></textarea>
+            <input type="text" id="edit-album-image" class="bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" placeholder="URL de la Imagen" required>
+            <img id="modal-album-image" src="" alt="Imagen del álbum en el modal" />
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Guardar Cambios</button>
+            <button type="button" class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="closeModal()">Cancelar</button>
+        </form>
+    </dialog>
+
+    <dialog id="addAlbumModal" class="bg-gray-800 p-6 rounded-lg">
+        <h2 class="text-xl mb-4">Agregar Álbum</h2>
+        <form id="addAlbumForm" class="formulario" onsubmit="addAlbum(event)">
+            <input class="controls bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" type="text" name="titulo" placeholder="Título" required>
+            <input class="controls bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" type="number" name="yearOfRelease" placeholder="Año de lanzamiento" required>
+            <textarea class="consultas bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" name="descripcion" rows="4" placeholder="Descripción" required></textarea>
+            <input class="imagen bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" type="url" name="portada" id="portada" placeholder="URL de la imagen" required>
+            <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Agregar Álbum</button>
+        </form>
+        <button onclick="closeAddAlbumModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Cerrar</button>
+    </dialog>
+
+    <!-- Modal de Añadir Canción -->
+    <dialog id="addSongModal" class="bg-gray-800 p-6 rounded-lg">
+        <h2 class="text-xl mb-4">Agregar Canción</h2>
+        <form id="addSongForm" onsubmit="addSong(event)">
+            <label for="song-name" class="block mb-2">Título de la canción:</label>
+            <input type="text" name="nombreDeCancion" id="nombreDeCancion" placeholder="Nombre de la canción" class="bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full" required>
+
+            <label for="song-youtube" class="block mb-2">Enlace de YouTube:</label>
+            <input type="url" name="enlaceYouTube" id="enlaceYouTube" placeholder="Enlace a YouTube" class="bg-gray-700 border border-gray-600 p-2 rounded mb-2 w-full">
+
+            <button type="button" onclick="closeAddSongModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+            <button type="submit" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded">Agregar Canción</button>
+        </form>
+    </dialog>
+
+    <script src="todoslosalbums.js" defer></script> 
+    <script src="auth.js"></script>
+   
+</body>
+</html>

@@ -1,0 +1,28 @@
+body {
+  background-color: black; /* Mantiene el fondo negro */
+}
+
+.controls {
+  width: 100%;
+  border: 1px solid rgba(149, 40, 136, 0.408);
+  background: rgba(134, 110, 231, 0.2);
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.controls:focus {
+  border-color: #866ee7; /* Color al enfocar el input */
+  outline: none; /* Elimina el outline por defecto */
+}
+
+.reg {
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.reg:hover {
+  background: linear-gradient(90deg, #ea60da, #866ee7);
+  transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+}
