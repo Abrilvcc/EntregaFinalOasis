@@ -1,6 +1,7 @@
+// UI.js (Este archivo solo maneja la UI)
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Comprueba si el usuario está autenticado al cargar la página
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const isAuthenticated = localStorage.getItem('isAuthenticated'); // Solo consulta el estado de autenticación local
 
     const logoutButton = document.querySelector("#logout-button");
     const loginLink = document.querySelector("#login-link");
@@ -11,11 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
         loginLink.classList.add("hidden"); // Oculta el enlace de Login
         registerLink.classList.add("hidden"); // Oculta el enlace de Registrar
 
-        // Agrega el evento de clic para redirigir al formulario de login
         logoutButton.addEventListener("click", function () {
-            // Opcionalmente, puedes eliminar el estado de autenticación
             localStorage.removeItem('isAuthenticated'); // Elimina la autenticación
-            window.location.href = "Login.html"; // Redirige al formulario de login
+            window.location.href = "login.html"; // Redirige al login
         });
     } else {
         logoutButton.classList.add("hidden"); // Oculta el botón de Logout

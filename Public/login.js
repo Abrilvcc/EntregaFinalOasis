@@ -1,3 +1,9 @@
+// Importa Axios si no lo has hecho
+// import axios from 'axios'; // (Descomenta esto si es necesario)
+
+// Configura Axios para incluir cookies en las solicitudes
+axios.defaults.withCredentials = true;
+
 // Espera a que el contenido del DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
     // Selecciona el formulario de login por su ID
@@ -50,10 +56,13 @@ document.addEventListener("DOMContentLoaded", function () {
             // Solicitud de autenticación al backend
             const response = await axios.post("http://localhost:5000/user/login", loginData);
             console.log(response.data); // Verifica qué devuelve el servidor
-
+        
             // Almacena el estado de autenticación en localStorage
             localStorage.setItem('isAuthenticated', 'true'); // Indica que el usuario está autenticado
-
+            
+            // Guarda el token en una cookie
+            document.cookie = `token=${response.data.token}; path=/;`; // Almacena el token en la cookie
+        
             // Alerta de éxito y redirección
             Swal.fire({
                 title: "¡Éxito!",
@@ -74,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 confirmButtonText: "Aceptar",
             });
         }
+        
     });
 
     // Gestión del cierre de sesión

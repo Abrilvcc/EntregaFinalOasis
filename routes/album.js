@@ -6,7 +6,7 @@ const hashPassword = require('./hashPassword.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../middleware/authenticate.js');
 // CRUD
 
 // CREATE - Agregar un álbum

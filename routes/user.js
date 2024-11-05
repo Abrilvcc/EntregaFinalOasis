@@ -5,10 +5,10 @@ const hashPassword = require('./hashPassword.js'); // Importación directa de ha
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser'); // Importa cookie-parser
-const verifyToken = require('../middleware/auth'); 
+const verifyToken = require('../middleware/authenticate.js'); 
 
 const router = express.Router();
-const secret = process.env.SECRET_KEY;
+const secret = "1234";
 
 // Middleware para parsear cookies
 router.use(cookieParser()); // Agrega este middleware

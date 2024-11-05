@@ -4,22 +4,29 @@ const routes = require('./routes/index');
 const userRoutes = require('./routes/user'); 
 const path = require("path");
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const authenticate = require('./middleware/authenticate'); // Importa el paquete cors
 require('dotenv').config();
 
 console.log(process.env.DATABASE_URL); 
 const app = express();
 const url = process.env.DATABASE_URL; 
-const secret = process.env.SECRET_KEY;
-console.log(process.env.SECRET_KEY)
+
 // Middleware para parsear JSON
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "Public"))); 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// Configuración de CORS
+app.use(cors({
+    origin: 'http://localhost:5000', 
+    credentials: true, 
+}));
+
 // Rutas
 app.use('/', routes); 
-app.use('/user', userRoutes); 
+app.use('/user', authenticate, userRoutes); 
 
 // Función para conectar a MongoDB
 const connectToMongo = async () => {
