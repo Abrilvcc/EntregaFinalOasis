@@ -1,61 +1,53 @@
-// autentificador.js
-
-// Función onLoad que se ejecuta al cargar la página para obtener los datos del usuario
-const onLoad = async () => {
-    try {
-        const response = await axios.get("http://localhost:5000/user/me", { withCredentials: true });
-        const user = `${response.data.nombre} ${response.data.apellido}`;
-        const userName = document.getElementById("user-name");
-        userName.textContent = user;
-    } catch (error) {
-        window.location.href = "./login.html"; // Redirige al login si no está autenticado
-    }
-};
-
 document.addEventListener("DOMContentLoaded", async function () {
-    const isAuthenticated = localStorage.getItem('isAuthenticated'); // Verifica si está autenticado en el localStorage
+    try {
+        // Verificación de autenticación con el backend usando el token en las cookies
+        console.log("Verificando autenticación...");
+        const response = await axios.get("http://localhost:5000/user/validate", { withCredentials: true });
+        
+        console.log("Respuesta del servidor:", response.data);
 
-    if (isAuthenticated) {
-        try {
-            // Verificación adicional con el backend
-            const response = await axios.get("http://localhost:5000/user/validate", { withCredentials: true });
-            if (!response.data.isAuthenticated) {
-                localStorage.removeItem('isAuthenticated'); // Elimina la autenticación
-                window.location.href = "./login.html"; // Redirige al login si no está autenticado
-                return;
+        if (response.data.isAuthenticated) {
+            // Si está autenticado, ejecuta onLoad para cargar los datos del álbum
+            await onLoad();
+
+            // Mostrar los botones de logout y ocultar el login y registro
+            const logoutButton = document.querySelector("#logout-button");
+            const loginLink = document.querySelector("#login-link");
+            const registerLink = document.querySelector("#register-link");
+
+            if (logoutButton && loginLink && registerLink) {
+                logoutButton.classList.remove("hidden"); // Muestra el botón de Logout
+                loginLink.classList.add("hidden"); // Oculta el enlace de Login
+                registerLink.classList.add("hidden"); // Oculta el enlace de Registro
             }
-        } catch (error) {
-            console.error("Error al verificar la autenticación:", error);
-            localStorage.removeItem('isAuthenticated');
-            window.location.href = "./login.html"; // Redirige al login si hay un error
-            return;
+
+            // Agregar el evento de clic para cerrar sesión
+            logoutButton?.addEventListener("click", async function () {
+                try {
+                    await axios.post("http://localhost:5000/user/logout", {}, { withCredentials: true });
+                    window.location.href = "login.html"; // Redirige al login
+                } catch (err) {
+                    console.error("Error al cerrar sesión:", err);
+                }
+            });
+
+            // Mostrar los botones de agregar y editar álbumes solo si está autenticado
+            const addAlbumButton = document.getElementById("add-album-btn");
+            const editAlbumButton = document.getElementById("edit-album-btn");
+
+            if (addAlbumButton && editAlbumButton) {
+                addAlbumButton.classList.remove("hidden"); // Muestra el botón de agregar álbum
+                editAlbumButton.classList.remove("hidden"); // Muestra el botón de editar álbum
+            }
+
+        } else {
+            console.log("No autenticado, redirigiendo...");
+            // Si no está autenticado, redirige al login
+            window.location.href = "./login.html";
         }
-
-        // Si está autenticado, ejecuta onLoad para cargar los datos del usuario
-        await onLoad();
-
-        // Mostrar el botón de logout y ocultar el login y registro
-        const logoutButton = document.querySelector("#logout-button");
-        const loginLink = document.querySelector("#login-link");
-        const registerLink = document.querySelector("#register-link");
-
-        logoutButton.classList.remove("hidden"); // Muestra el botón de Logout
-        loginLink.classList.add("hidden"); // Oculta el enlace de Login
-        registerLink.classList.add("hidden"); // Oculta el enlace de Registro
-
-        // Agregar el evento de clic para redirigir al formulario de login
-        logoutButton.addEventListener("click", function () {
-            localStorage.removeItem('isAuthenticated'); // Elimina la autenticación
-            window.location.href = "login.html"; // Redirige al formulario de login
-        });
-    } else {
-        // Si no está autenticado, muestra los enlaces de login y registro
-        const logoutButton = document.querySelector("#logout-button");
-        const loginLink = document.querySelector("#login-link");
-        const registerLink = document.querySelector("#register-link");
-
-        logoutButton.classList.add("hidden"); // Oculta el botón de Logout
-        loginLink.classList.remove("hidden"); // Muestra el enlace de Login
-        registerLink.classList.remove("hidden"); // Muestra el enlace de Registrar
+    } catch (error) {
+        // Si hay un error en la verificación, redirige al login
+        console.error("Error al verificar la autenticación:", error);
+        window.location.href = "./login.html"; // Redirige al login
     }
 });

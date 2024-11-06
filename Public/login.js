@@ -60,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Almacena el estado de autenticación en localStorage
             localStorage.setItem('isAuthenticated', 'true'); // Indica que el usuario está autenticado
             
-            // Guarda el token en una cookie
-            document.cookie = `token=${response.data.token}; path=/;`; // Almacena el token en la cookie
+            // Guarda el token en localStorage
+            localStorage.setItem('token', response.data.token); // Almacena el token en localStorage
         
             // Alerta de éxito y redirección
             Swal.fire({
@@ -83,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 confirmButtonText: "Aceptar",
             });
         }
-        
     });
 
     // Gestión del cierre de sesión
@@ -97,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Limpia el estado de autenticación en localStorage
                 localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('token'); // Elimina el token
 
                 // Redirige al usuario al login
                 window.location.href = "./login.html"; // Asegúrate de que la ruta sea correcta

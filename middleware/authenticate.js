@@ -1,21 +1,21 @@
 const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_SECRET;
 
-// Middleware de autenticación
-const authenticate = (req, res, next) => {
-    const token = req.cookies.token; // O el método que estés utilizando para almacenar el token
-    
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token; // Asegúrate de que estás obteniendo el token de las cookies
+
     if (!token) {
-        return res.status(401).json({ message: 'Acceso denegado. No estás autenticado.' });
+        return res.status(401).send({ message: 'No autenticado' });
     }
 
-    try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = verified; // Almacena la información del usuario verificado
-        next(); // Continúa con la siguiente función (ruta)
-    } catch (err) {
-        res.status(400).json({ message: 'Token inválido.' });
-    }
+    jwt.verify(token, secret, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: 'Token inválido' });
+        }
+
+        req.userId = decoded.id; // Guarda el ID del usuario en la solicitud
+        next(); // Pasa al siguiente middleware o ruta
+    });
 };
 
-
-module.exports = authenticate; // Exporta el middleware
+module.exports = verifyToken;

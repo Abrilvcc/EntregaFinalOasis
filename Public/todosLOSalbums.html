@@ -39,26 +39,26 @@
         <p class="text-lg">¡Bienvenido a la sección de Álbumes! Explora, agrega y edita tus álbumes favoritos.</p>
     </div>
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gray-800 h-full fixed top-0 left-0">
-        <div class="p-4 flex flex-col items-center">
-            <!-- Imagen de usuario -->
-            <img src="liamandnoel.jpg" alt="Usuario" class="w-16 h-16 rounded-full mb-4">
-            <h2 class="text-xl mb-2">LiamAndNoelFan</h2> <!-- Nombre del usuario -->
+  <!-- Sidebar -->
+<aside class="w-64 bg-gray-800 h-full fixed top-0 left-0 shadow-lg">
+    <div class="p-6 flex flex-col items-center">
+        <!-- Imagen de usuario -->
+        <img src="liamandnoel.jpg" alt="Usuario" class="w-20 h-20 rounded-full mb-6 border-4 border-purple-600">
+        <h2 class="text-xl text-white mb-2">LiamAndNoelFan</h2> <!-- Nombre del usuario -->
             <h1 class="text-2xl mb-4">Álbumes Creados</h1>
             <button onclick="openAddAlbumModal()" class="bg-purple-600 text-white px-4 py-2 rounded mb-4">Agregar Álbum</button>
             <ul id="album-list">
                 <li class="album-item mb-4 flex justify-between items-center">
                     Álbum 1
-                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
-                </li>
+           
+               </li>
                 <li class="album-item mb-4 flex justify-between items-center">
                     Álbum 2
-                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
+                   
                 </li>
                 <li class="album-item mb-4 flex justify-between items-center">
                     Álbum 3
-                    <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
+                  
                 </li>
             </ul>
             
@@ -68,6 +68,7 @@
     <main class="ml-64 p-4">
         <h2 class="text-3xl mb-4"></h2>
         <h3 id="album-title" class="text-2xl mb-8"></h3>
+        <i class="far fa-star text-yellow-500 cursor-pointer favorite-icon" onclick="toggleFavorite(this)"></i>
         <p id="album-description" class="mb-4"></p>
         <img id="album-image" class="mb-4" src="" alt="Imagen del álbum" />
         <div class="flex space-x-2">
@@ -139,7 +140,7 @@
     </dialog>
 
     <script src="todoslosalbums.js" defer></script> 
-    <script src="autentificador.js"></script>
+    
     <script src="auth.js"></script>
     
   

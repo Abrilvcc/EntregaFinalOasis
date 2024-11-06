@@ -127,6 +127,14 @@ async function updateAlbum(event) {
         albumDescriptionElement.innerText = updatedAlbum.descripcion || 'Descripción no disponible';
         albumImageElement.src = updatedAlbum.portada || 'ImagenDefault.jpg'; // Cambia a la nueva portada
 
+        // Actualizar el título del álbum en la lista de la sidebar
+        const albumListItems = albumListElement.querySelectorAll('li');
+        albumListItems.forEach(item => {
+            if (item.innerText === currentAlbumId) { // Compara el ID del álbum con el texto en la lista
+                item.innerText = updatedAlbum.titulo; // Actualiza el título
+            }
+        });
+
         Swal.fire({
             title: 'Éxito',
             text: 'Álbum actualizado correctamente',
@@ -168,7 +176,7 @@ function getInputValues() {
     };
 }
 
-// Función para agregar un álbum
+
 // Función para agregar un álbum
 document.getElementById('addAlbumForm').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -224,51 +232,47 @@ function closeAddSongModal() {
     if (addSongModal) addSongModal.close();
 }
 
-// Función para cargar las canciones de un álbum específico y mostrarlas en el modal
 async function loadAlbumSongs(albumId) {
     try {
         const response = await axios.get(`http://localhost:5000/albums/${albumId}/canciones`);
         const songs = response.data;
         const songListElement = document.getElementById("song-list");
 
-        console.log("Canciones cargadas del álbum:", songs); // Verifica qué canciones se están cargando
-
         // Limpia la lista de canciones antes de agregar nuevas canciones
         songListElement.innerHTML = '';
 
-        // Agrega cada canción como un elemento de lista con botón de eliminación y enlace a YouTube
+        // Agrega cada canción como un elemento de lista
         songs.forEach(song => {
-            // Crear elemento de lista solo si no existe en la lista actual
-            if (!document.getElementById(`song-${song._id}`)) {
-                const listItem = document.createElement("li");
-                listItem.id = `song-${song._id}`; // Asigna un ID único basado en el ID de la canción
-                listItem.innerText = song.nombreDeCancion;
+            const listItem = document.createElement("li");
+            listItem.id = `song-${song._id}`; // Asigna un ID único basado en el ID de la canción
+            listItem.innerText = song.nombreDeCancion;
 
-                // Agregar enlace de YouTube si existe
-                if (song.enlaceYouTube) {
-                    const youtubeLink = document.createElement("a");
-                    youtubeLink.href = song.enlaceYouTube;
-                    youtubeLink.target = "_blank";
-                    youtubeLink.innerText = " Ver en YouTube";
-                    youtubeLink.classList.add("ml-2", "text-blue-500", "hover:underline"); // Agrega estilos al enlace
-                    listItem.appendChild(youtubeLink);
-                }
-
-                // Crear botón de eliminación
-                const deleteButton = document.createElement("button");
-                deleteButton.innerText = "Eliminar";
-                deleteButton.classList.add("delete-song-btn", "ml-4");
-                deleteButton.onclick = () => deleteSong(albumId, song._id); // Llama a deleteSong con el ID del álbum y de la canción
-
-                listItem.appendChild(deleteButton);
-                songListElement.appendChild(listItem);
+            // Agregar enlace de YouTube si existe
+            if (song.enlaceYouTube) {
+                const youtubeLink = document.createElement("a");
+                youtubeLink.href = song.enlaceYouTube;
+                youtubeLink.target = "_blank";
+                youtubeLink.innerText = " Ver en YouTube";
+                youtubeLink.classList.add("ml-2", "text-blue-500", "hover:underline");
+                listItem.appendChild(youtubeLink);
             }
+
+            // Crear botón de eliminación con icono de tacho de basura
+            const deleteButton = document.createElement("button");
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>'; // Icono de Font Awesome
+            deleteButton.classList.add("delete-song-btn", "ml-4", "text-red-500", "hover:text-red-700", "cursor-pointer");
+            deleteButton.onclick = () => deleteSong(albumId, song._id);
+
+            listItem.appendChild(deleteButton);
+            songListElement.appendChild(listItem);
         });
     } catch (error) {
         console.error('Error al cargar canciones:', error);
         Swal.fire('Error', 'No se pudieron cargar las canciones', 'error');
     }
 }
+
+
 
 // Función para agregar una canción
 async function addSong(event) {
@@ -395,3 +399,4 @@ function toggleFavorite(starIcon) {
         starIcon.classList.add('far'); // Volver a icono vacío
     }
 }
+

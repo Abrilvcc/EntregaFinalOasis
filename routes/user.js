@@ -1,4 +1,3 @@
-// routes/user.js
 const express = require('express');
 const User = require('../models/user.js'); // Asegúrate de que la ruta sea correcta
 const hashPassword = require('./hashPassword.js'); // Importación directa de hashPassword
@@ -6,9 +5,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser'); // Importa cookie-parser
 const verifyToken = require('../middleware/authenticate.js'); 
+require('dotenv').config(); // Cargar variables de entorno al inicio
 
 const router = express.Router();
-const secret = "1234";
+const secret = process.env.JWT_SECRET; // Utiliza JWT_SECRET del archivo .env
 
 // Middleware para parsear cookies
 router.use(cookieParser()); // Agrega este middleware
@@ -19,6 +19,22 @@ const checkPassword = async (pass, dbpass) => {
     console.log('RESULTADO MATCH', match);
     return match; 
 };
+
+// Ruta para validar la sesión
+router.get('/validate', (req, res) => {
+    const token = req.cookies.token;  // O usa req.headers['authorization'] para obtener el token de los headers
+
+    if (!token) {
+        return res.json({ isAuthenticated: false });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.json({ isAuthenticated: false });
+        }
+        res.json({ isAuthenticated: true, user });
+    });
+});
 
 // Ruta para crear un usuario
 router.post('/', async (req, res) => {
@@ -83,6 +99,8 @@ router.get('/', async (req, res) => {
 // Ruta para obtener un usuario por ID, excluyendo la contraseña
 router.get('/:id', async (req, res) => {
     try {
+        console.log("ID recibido en la ruta /:id:", req.params.id); // Muestra el ID recibido en la consola
+        
         const user = await User.findById(req.params.id).select('-contraseña');
         if (!user) return res.status(404).send("Usuario no encontrado");
         res.status(200).send(user);
@@ -157,7 +175,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign(payload, secret, { expiresIn: '24h' });
 
         // 4. Configurar la cookie con el token y responder con el payload
-        res.cookie('token', token, { httpOnly: true, secure: true }); // Asegúrate de establecer secure: true en producción
+        res.cookie('token', token, { httpOnly: true, secure: false }); // Asegúrate de establecer secure: true en producción
         res.status(200).send(payload); // Envía el payload al cliente
     } catch (error) {
         console.error("Error en el proceso de autenticación:", error);
@@ -181,21 +199,6 @@ router.post('/logout', (req, res) => {
 // Ruta protegida que requiere autenticación
 router.get('/protected-route', verifyToken, (req, res) => {
     res.status(200).send(`Bienvenido, ${req.user.nombre}`);
-});
-
-// Ruta para validar la sesión
-router.get('/validate', (req, res) => {
-    const token = req.cookies.token;
-    if (!token) {
-        return res.status(401).send({ isAuthenticated: false });
-    }
-
-    jwt.verify(token, secret, (err, decoded) => {
-        if (err) {
-            return res.status(401).send({ isAuthenticated: false });
-        }
-        res.send({ isAuthenticated: true, user: decoded });
-    });
 });
 
 // Exportar el router de usuarios

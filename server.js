@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/index'); 
@@ -6,7 +7,7 @@ const path = require("path");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authenticate = require('./middleware/authenticate'); // Importa el paquete cors
-require('dotenv').config();
+
 
 console.log(process.env.DATABASE_URL); 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cors({
 // Rutas
 app.use('/', routes); 
 app.use('/user', authenticate, userRoutes); 
+app.use('/user', userRoutes);
 
 // Función para conectar a MongoDB
 const connectToMongo = async () => {

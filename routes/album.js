@@ -1,16 +1,12 @@
 const express = require('express');
 const Album = require('../models/album.js');  
-const path = require('path');
 const router = express.Router();
-const hashPassword = require('./hashPassword.js');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
-const verifyToken = require('../middleware/authenticate.js');
+const verifyToken = require('../middleware/authenticate.js'); // Importar el middleware de autenticación
+
 // CRUD
 
 // CREATE - Agregar un álbum
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         await Album.create(req.body);
         res.status(201).send("Álbum agregado correctamente");
@@ -21,7 +17,7 @@ router.post('/', async (req, res) => {
 });
 
 // GET ALL - Traer todos los álbumes
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const result = await Album.find({});
         res.status(200).send(result);
@@ -32,7 +28,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET POR ID - Obtener un álbum por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     console.log("ID del álbum recibido:", req.params.id);
     try {
         const result = await Album.findById(req.params.id);
@@ -47,7 +43,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // UPDATE - Actualizar un álbum por ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     console.log("ID recibido para actualización:", req.params.id);
     try {
         const id = req.params.id;
@@ -64,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE - Eliminar un álbum por ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
         await Album.findByIdAndDelete(id);
@@ -75,24 +71,12 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// GET POR NOMBRE
-router.get('/titulo/:titulo', async (req, res) => {
-    try {
-        const result = await Album.find({ titulo: req.params.titulo });
-        res.status(200).send(result);
-    } catch (error) {
-        console.log(error);
-        res.status(404).send("No data");
-    }
-});
-
 // CREATE - Agregar una canción a un álbum
-router.post('/:id/canciones', async (req, res) => {
+router.post('/:id/canciones', verifyToken, async (req, res) => {
     console.log("Datos recibidos en la solicitud:", req.body);
 
-    const { nombreDeCancion, enlaceYouTube } = req.body; // Manteniendo enlaceYouTube como campo
+    const { nombreDeCancion, enlaceYouTube } = req.body;
 
-    // Verifica que se reciban los campos necesarios
     if (!nombreDeCancion || !enlaceYouTube) {
         console.log("Faltan campos obligatorios:", { nombreDeCancion, enlaceYouTube });
         return res.status(400).json({ error: "Los campos 'nombreDeCancion' y 'enlaceYouTube' son obligatorios." });
@@ -107,12 +91,11 @@ router.post('/:id/canciones', async (req, res) => {
             return res.status(404).json({ error: "Álbum no encontrado." });
         }
 
-        // Agregar la nueva canción al álbum
         album.canciones.push({ nombreDeCancion, enlaceYouTube });
-        await album.save(); // Guarda el álbum actualizado
+        await album.save();
 
         console.log("Álbum actualizado:", album);
-        res.status(201).json(album); // Responde con el álbum actualizado
+        res.status(201).json(album);
     } catch (error) {
         console.error("Error al agregar la canción:", error);
         res.status(500).json({ error: "Error al agregar la canción.", details: error.message });
@@ -120,7 +103,7 @@ router.post('/:id/canciones', async (req, res) => {
 });
 
 // GET - Obtener canciones de un álbum por ID
-router.get('/:id/canciones', async (req, res) => {
+router.get('/:id/canciones', verifyToken, async (req, res) => {
     try {
         const album = await Album.findById(req.params.id);
         if (!album) {
@@ -134,20 +117,18 @@ router.get('/:id/canciones', async (req, res) => {
 });
 
 // DELETE - Eliminar una canción de un álbum
-router.delete('/:albumId/canciones/:cancionId', async (req, res) => {
+router.delete('/:albumId/canciones/:cancionId', verifyToken, async (req, res) => {
     try {
         const album = await Album.findById(req.params.albumId);
         if (!album) {
             return res.status(404).send("Álbum no encontrado");
         }
 
-        // Encuentra el índice de la canción que quieres eliminar
         const cancionIndex = album.canciones.findIndex(c => c._id.toString() === req.params.cancionId);
         if (cancionIndex === -1) {
             return res.status(404).send("Canción no encontrada");
         }
 
-        // Elimina la canción usando el índice
         album.canciones.splice(cancionIndex, 1);
         await album.save();
 
@@ -158,6 +139,4 @@ router.delete('/:albumId/canciones/:cancionId', async (req, res) => {
     }
 });
 
-
-
-module.exports = router; // Exporta solo el router
+module.exports = router;
