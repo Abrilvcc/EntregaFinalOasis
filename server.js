@@ -6,7 +6,7 @@ const userRoutes = require('./routes/user');
 const path = require("path");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const authenticate = require('./middleware/authenticate'); // Importa el paquete cors
+const authenticate = require('./middleware/authenticate'); // Importa el middleware de autenticación
 
 console.log(process.env.DATABASE_URL); 
 const app = express();
@@ -40,8 +40,10 @@ const connectToMongo = async () => {
         await mongoose.connect(url); 
         console.log('Conectado a la base de datos');
 
-        app.listen(5000, () => {
-            console.log('Servidor escuchando en el puerto 5000 y DB');
+        // Utilizar el puerto dinámico de Render
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => {
+            console.log(`Servidor escuchando en el puerto ${PORT} y DB`);
         });
     } catch (error) {
         console.log('Error al conectar a la base de datos:', error);
