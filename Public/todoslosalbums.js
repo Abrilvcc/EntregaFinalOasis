@@ -8,7 +8,7 @@ let currentAlbumId; // Variable para almacenar el ID del álbum actual
 // Cargar los álbumes desde el servidor
 async function loadAlbums() {
     try {
-        const response = await axios.get('/albums'); // Asegúrate de que esta URL sea correcta
+        const response = await axios.get('https://proyectobandaoasis.onrender.com/albums'); // Asegúrate de que esta URL sea correcta
         const albums = response.data; // Suponiendo que recibes un array de álbumes
 
         albumListElement.innerHTML = ''; // Limpia la lista antes de agregar nuevos álbumes
@@ -90,7 +90,7 @@ async function confirmDeleteAlbum() {
 // Eliminar álbum
 async function deleteAlbum(albumId) {
     try {
-        await axios.delete(`/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
+        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
         Swal.fire({
             title: 'Éxito',
             text: 'Álbum eliminado correctamente',
@@ -120,7 +120,7 @@ async function updateAlbum(event) {
 
     try {
         // Actualizar el álbum en el servidor
-        await axios.put(`/albums/${currentAlbumId}`, updatedAlbum); // Asegúrate de que esta URL sea correcta
+        await axios.put(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}`, updatedAlbum); // Asegúrate de que esta URL sea correcta
         
         // Actualiza los detalles del álbum en el DOM sin recargar
         albumTitleElement.innerText = updatedAlbum.titulo || 'Título no disponible';
@@ -182,7 +182,7 @@ document.getElementById('addAlbumForm').addEventListener('submit', function (eve
     event.preventDefault();
     const albumData = getInputValues();
 
-    axios.post("http://localhost:5000/albums", albumData)
+    axios.post("https://proyectobandaoasis.onrender.com/albums", albumData)
     .then((response) => {
         // Agregar el álbum a la lista de manera instantánea
         appendAlbum(response.data); // Agrega el álbum a la lista en el index
@@ -234,7 +234,7 @@ function closeAddSongModal() {
 
 async function loadAlbumSongs(albumId) {
     try {
-        const response = await axios.get(`http://localhost:5000/albums/${albumId}/canciones`);
+        const response = await axios.get(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones`);
         const songs = response.data;
         const songListElement = document.getElementById("song-list");
 
@@ -296,7 +296,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -329,7 +329,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -346,7 +346,7 @@ document.getElementById('addSongForm').addEventListener('submit', addSong);
 // Función para eliminar una canción específica
 async function deleteSong(albumId, songId) {
     try {
-        await axios.delete(`http://localhost:5000/albums/${albumId}/canciones/${songId}`);
+        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones/${songId}`);
         Swal.fire({
             title: 'Éxito',
             text: 'Canción eliminada correctamente',
