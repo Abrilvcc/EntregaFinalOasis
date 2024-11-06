@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
         // Verificación de autenticación con el backend usando el token en las cookies
         console.log("Verificando autenticación...");
-        const response = await axios.get("http://localhost:5000/user/validate", { withCredentials: true });
+        const response = await axios.get("https://proyectobandaoasis.onrender.com/user/validate", { withCredentials: true });
         
         console.log("Respuesta del servidor:", response.data);
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             // Agregar el evento de clic para cerrar sesión
             logoutButton?.addEventListener("click", async function () {
                 try {
-                    await axios.post("http://localhost:5000/user/logout", {}, { withCredentials: true });
+                    await axios.post("https://proyectobandaoasis.onrender.com/user/logout", {}, { withCredentials: true });
                     window.location.href = "login.html"; // Redirige al login
                 } catch (err) {
                     console.error("Error al cerrar sesión:", err);

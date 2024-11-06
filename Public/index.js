@@ -17,7 +17,7 @@ function toggleFavorite(icon) {
 
 // Función para cargar todos los álbumes
 function fetchAlbums() {
-    axios.get("http://localhost:5000/album")
+    axios.get("https://proyectobandaoasis.onrender.com/album")
         .then((response) => {
             const albums = response.data;
             const albumsContainer = document.getElementById("albumsContainer");
@@ -92,11 +92,11 @@ function deleteAlbum(albumId) {
         return;
     }
 
-    axios.get(`http://localhost:5000/album/${albumId}`)
+    axios.get(`https://proyectobandaoasis.onrender.com/album/${albumId}`)
         .then(response => {
             lastDeletedAlbum = response.data;
 
-            axios.delete(`http://localhost:5000/album/${albumId}`)
+            axios.delete(`https://proyectobandaoasis.onrender.com/album/${albumId}`)
                 .then(() => {
                     Swal.fire({
                         title: 'Álbum eliminado',
@@ -125,7 +125,7 @@ function deleteAlbum(albumId) {
 
 // Función para restaurar el álbum eliminado
 function restoreAlbum(album) {
-    axios.post("http://localhost:5000/album", album)
+    axios.post("https://proyectobandaoasis.onrender.com/album", album)
         .then(() => {
             Swal.fire('Éxito', 'Álbum restaurado correctamente', 'success');
             fetchAlbums();
