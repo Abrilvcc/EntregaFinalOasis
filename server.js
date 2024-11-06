@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const routes = require('./routes/index'); 
-const userRoutes = require('./routes/user'); 
+const routes = require('./routes/index');
+const userRoutes = require('./routes/user');
 const path = require("path");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -20,10 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuración de CORS
 app.use(cors({
-    origin: ['https://proyectobandaoasis.onrender.com'],
+    origin: 'https://proyectobandaoasis.onrender.com',
     credentials: true,
 }));
-
 
 // Rutas
 app.use('/', routes); 
@@ -35,21 +34,10 @@ app.use("/health", (req, res) => {
     res.sendStatus(200); 
 });
 
-// Función para conectar a MongoDB
-const connectToMongo = async () => {
-    try {
-        await mongoose.connect(url); 
-        console.log('Conectado a la base de datos');
-
-        // Utilizar el puerto dinámico de Render
-        const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => {
-            console.log(`Servidor escuchando en el puerto ${PORT} y DB`);
-        });
-    } catch (error) {
-        console.log('Error al conectar a la base de datos:', error);
-    }
-};
+// Conectar a MongoDB
+mongoose.connect(process.env.DATABASE_URL)
+    .then(() => console.log("Conectado a MongoDB"))
+    .catch(error => console.log("Error de conexión a MongoDB:", error));
 
 // Manejo de errores global
 app.use((err, req, res, next) => {
@@ -57,5 +45,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Algo salió mal!');
 });
 
-// Llama a la función de conexión a MongoDB
-connectToMongo();
+// No es necesario llamar a `connectToMongo()`, ya que la conexión está hecha directamente arriba
+// Eliminar la siguiente línea:
+// connectToMongo();
