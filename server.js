@@ -20,9 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuración de CORS
 app.use(cors({
-    origin: ['http://localhost:5000', 'https://proyectobandaoasis.onrender.com'], // Aquí agregamos el dominio de producción
-    credentials: true, // Permite el envío de cookies si es necesario
+    origin: ['https://proyectobandaoasis.onrender.com'],
+    credentials: true,
 }));
+
 
 // Rutas
 app.use('/', routes); 
