@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
             // Solicitud de autenticación al backend
-            const response = await axios.post("http://localhost:5000/user/login", loginData);
+            const response = await axios.post("https://proyectobandaoasis.onrender.com/user/login", loginData);
             console.log(response.data); // Verifica qué devuelve el servidor
         
             // Almacena el estado de autenticación en localStorage
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutButton.addEventListener("click", async function () {
             try {
                 // Realiza la solicitud al backend para cerrar sesión
-                await axios.post("http://localhost:5000/user/logout");
+                await axios.post("https://proyectobandaoasis.onrender.com/user/logout");
 
                 // Limpia el estado de autenticación en localStorage
                 localStorage.removeItem('isAuthenticated');
