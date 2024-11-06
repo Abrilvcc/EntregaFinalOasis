@@ -8,7 +8,6 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authenticate = require('./middleware/authenticate'); // Importa el paquete cors
 
-
 console.log(process.env.DATABASE_URL); 
 const app = express();
 const url = process.env.DATABASE_URL; 
@@ -29,6 +28,11 @@ app.use(cors({
 app.use('/', routes); 
 app.use('/user', authenticate, userRoutes); 
 app.use('/user', userRoutes);
+
+// Ruta de salud
+app.use("/health", (req, res) => {
+    res.sendStatus(200); 
+});
 
 // Función para conectar a MongoDB
 const connectToMongo = async () => {
