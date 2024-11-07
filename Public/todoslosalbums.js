@@ -8,7 +8,7 @@ let currentAlbumId; // Variable para almacenar el ID del álbum actual
 // Cargar los álbumes desde el servidor
 async function loadAlbums() {
     try {
-        const response = await axios.get('https://proyectobandaoasis.onrender.com/albums'); // Asegúrate de que esta URL sea correcta
+        const response = await axios.get('/albums'); // Asegúrate de que esta URL sea correcta
         const albums = response.data; // Suponiendo que recibes un array de álbumes
 
         albumListElement.innerHTML = ''; // Limpia la lista antes de agregar nuevos álbumes
@@ -90,7 +90,7 @@ async function confirmDeleteAlbum() {
 // Eliminar álbum
 async function deleteAlbum(albumId) {
     try {
-        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
+        await axios.delete(`/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
         Swal.fire({
             title: 'Éxito',
             text: 'Álbum eliminado correctamente',
@@ -120,20 +120,12 @@ async function updateAlbum(event) {
 
     try {
         // Actualizar el álbum en el servidor
-        await axios.put(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}`, updatedAlbum); // Asegúrate de que esta URL sea correcta
+        await axios.put(`/albums/${currentAlbumId}`, updatedAlbum); // Asegúrate de que esta URL sea correcta
         
         // Actualiza los detalles del álbum en el DOM sin recargar
         albumTitleElement.innerText = updatedAlbum.titulo || 'Título no disponible';
         albumDescriptionElement.innerText = updatedAlbum.descripcion || 'Descripción no disponible';
         albumImageElement.src = updatedAlbum.portada || 'ImagenDefault.jpg'; // Cambia a la nueva portada
-
-        // Actualizar el título del álbum en la lista de la sidebar
-        const albumListItems = albumListElement.querySelectorAll('li');
-        albumListItems.forEach(item => {
-            if (item.innerText === currentAlbumId) { // Compara el ID del álbum con el texto en la lista
-                item.innerText = updatedAlbum.titulo; // Actualiza el título
-            }
-        });
 
         Swal.fire({
             title: 'Éxito',
@@ -176,13 +168,13 @@ function getInputValues() {
     };
 }
 
-
+// Función para agregar un álbum
 // Función para agregar un álbum
 document.getElementById('addAlbumForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const albumData = getInputValues();
 
-    axios.post("https://proyectobandaoasis.onrender.com/albums", albumData)
+    axios.post("http://localhost:5000/albums", albumData)
     .then((response) => {
         // Agregar el álbum a la lista de manera instantánea
         appendAlbum(response.data); // Agrega el álbum a la lista en el index
@@ -232,47 +224,51 @@ function closeAddSongModal() {
     if (addSongModal) addSongModal.close();
 }
 
+// Función para cargar las canciones de un álbum específico y mostrarlas en el modal
 async function loadAlbumSongs(albumId) {
     try {
-        const response = await axios.get(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones`);
+        const response = await axios.get(`http://localhost:5000/albums/${albumId}/canciones`);
         const songs = response.data;
         const songListElement = document.getElementById("song-list");
+
+        console.log("Canciones cargadas del álbum:", songs); // Verifica qué canciones se están cargando
 
         // Limpia la lista de canciones antes de agregar nuevas canciones
         songListElement.innerHTML = '';
 
-        // Agrega cada canción como un elemento de lista
+        // Agrega cada canción como un elemento de lista con botón de eliminación y enlace a YouTube
         songs.forEach(song => {
-            const listItem = document.createElement("li");
-            listItem.id = `song-${song._id}`; // Asigna un ID único basado en el ID de la canción
-            listItem.innerText = song.nombreDeCancion;
+            // Crear elemento de lista solo si no existe en la lista actual
+            if (!document.getElementById(`song-${song._id}`)) {
+                const listItem = document.createElement("li");
+                listItem.id = `song-${song._id}`; // Asigna un ID único basado en el ID de la canción
+                listItem.innerText = song.nombreDeCancion;
 
-            // Agregar enlace de YouTube si existe
-            if (song.enlaceYouTube) {
-                const youtubeLink = document.createElement("a");
-                youtubeLink.href = song.enlaceYouTube;
-                youtubeLink.target = "_blank";
-                youtubeLink.innerText = " Ver en YouTube";
-                youtubeLink.classList.add("ml-2", "text-blue-500", "hover:underline");
-                listItem.appendChild(youtubeLink);
+                // Agregar enlace de YouTube si existe
+                if (song.enlaceYouTube) {
+                    const youtubeLink = document.createElement("a");
+                    youtubeLink.href = song.enlaceYouTube;
+                    youtubeLink.target = "_blank";
+                    youtubeLink.innerText = " Ver en YouTube";
+                    youtubeLink.classList.add("ml-2", "text-blue-500", "hover:underline"); // Agrega estilos al enlace
+                    listItem.appendChild(youtubeLink);
+                }
+
+                // Crear botón de eliminación
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "Eliminar";
+                deleteButton.classList.add("delete-song-btn", "ml-4");
+                deleteButton.onclick = () => deleteSong(albumId, song._id); // Llama a deleteSong con el ID del álbum y de la canción
+
+                listItem.appendChild(deleteButton);
+                songListElement.appendChild(listItem);
             }
-
-            // Crear botón de eliminación con icono de tacho de basura
-            const deleteButton = document.createElement("button");
-            deleteButton.innerHTML = '<i class="fas fa-trash"></i>'; // Icono de Font Awesome
-            deleteButton.classList.add("delete-song-btn", "ml-4", "text-red-500", "hover:text-red-700", "cursor-pointer");
-            deleteButton.onclick = () => deleteSong(albumId, song._id);
-
-            listItem.appendChild(deleteButton);
-            songListElement.appendChild(listItem);
         });
     } catch (error) {
         console.error('Error al cargar canciones:', error);
         Swal.fire('Error', 'No se pudieron cargar las canciones', 'error');
     }
 }
-
-
 
 // Función para agregar una canción
 async function addSong(event) {
@@ -296,7 +292,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -329,7 +325,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -346,7 +342,7 @@ document.getElementById('addSongForm').addEventListener('submit', addSong);
 // Función para eliminar una canción específica
 async function deleteSong(albumId, songId) {
     try {
-        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones/${songId}`);
+        await axios.delete(`http://localhost:5000/albums/${albumId}/canciones/${songId}`);
         Swal.fire({
             title: 'Éxito',
             text: 'Canción eliminada correctamente',
@@ -399,4 +395,3 @@ function toggleFavorite(starIcon) {
         starIcon.classList.add('far'); // Volver a icono vacío
     }
 }
-

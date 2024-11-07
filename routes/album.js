@@ -1,12 +1,11 @@
 const express = require('express');
 const Album = require('../models/album.js');  
 const router = express.Router();
-const verifyToken = require('../middleware/authenticate.js'); // Importar el middleware de autenticación
 
 // CRUD
 
 // CREATE - Agregar un álbum
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         await Album.create(req.body);
         res.status(201).send("Álbum agregado correctamente");
@@ -17,7 +16,7 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // GET ALL - Traer todos los álbumes
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const result = await Album.find({});
         res.status(200).send(result);
@@ -28,7 +27,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // GET POR ID - Obtener un álbum por ID
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/:id', async (req, res) => {
     console.log("ID del álbum recibido:", req.params.id);
     try {
         const result = await Album.findById(req.params.id);
@@ -43,7 +42,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 // UPDATE - Actualizar un álbum por ID
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
     console.log("ID recibido para actualización:", req.params.id);
     try {
         const id = req.params.id;
@@ -60,7 +59,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 });
 
 // DELETE - Eliminar un álbum por ID
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         await Album.findByIdAndDelete(id);
@@ -72,7 +71,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 });
 
 // CREATE - Agregar una canción a un álbum
-router.post('/:id/canciones', verifyToken, async (req, res) => {
+router.post('/:id/canciones', async (req, res) => {
     console.log("Datos recibidos en la solicitud:", req.body);
 
     const { nombreDeCancion, enlaceYouTube } = req.body;
@@ -103,7 +102,7 @@ router.post('/:id/canciones', verifyToken, async (req, res) => {
 });
 
 // GET - Obtener canciones de un álbum por ID
-router.get('/:id/canciones', verifyToken, async (req, res) => {
+router.get('/:id/canciones', async (req, res) => {
     try {
         const album = await Album.findById(req.params.id);
         if (!album) {
@@ -117,7 +116,7 @@ router.get('/:id/canciones', verifyToken, async (req, res) => {
 });
 
 // DELETE - Eliminar una canción de un álbum
-router.delete('/:albumId/canciones/:cancionId', verifyToken, async (req, res) => {
+router.delete('/:albumId/canciones/:cancionId', async (req, res) => {
     try {
         const album = await Album.findById(req.params.albumId);
         if (!album) {

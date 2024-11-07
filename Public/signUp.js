@@ -10,8 +10,8 @@ document.getElementById("signUpForm").addEventListener("submit", async (event) =
     };
 
     try {
-        // Hacer la solicitud POST a la URL de producción
-        await axios.post("https://proyectobandaoasis.onrender.com/user", data);
+        // Hacer la solicitud POST
+        await axios.post("http://localhost:5000/user", data);
 
         // Mostrar alerta de éxito
         Swal.fire({

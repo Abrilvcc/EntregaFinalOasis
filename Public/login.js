@@ -1,9 +1,6 @@
 // Importa Axios si no lo has hecho
 // import axios from 'axios'; // (Descomenta esto si es necesario)
 
-// Configura Axios para incluir cookies en las solicitudes
-axios.defaults.withCredentials = true;
-
 // Espera a que el contenido del DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
     // Selecciona el formulario de login por su ID
@@ -54,15 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
             // Solicitud de autenticación al backend
-            const response = await axios.post("https://proyectobandaoasis.onrender.com/user/login", loginData);
+            const response = await axios.post("http://localhost:5000/user/login", loginData);
             console.log(response.data); // Verifica qué devuelve el servidor
-        
-            // Almacena el estado de autenticación en localStorage
-            localStorage.setItem('isAuthenticated', 'true'); // Indica que el usuario está autenticado
-            
-            // Guarda el token en localStorage
-            localStorage.setItem('token', response.data.token); // Almacena el token en localStorage
-        
+
             // Alerta de éxito y redirección
             Swal.fire({
                 title: "¡Éxito!",
@@ -92,11 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutButton.addEventListener("click", async function () {
             try {
                 // Realiza la solicitud al backend para cerrar sesión
-                await axios.post("https://proyectobandaoasis.onrender.com/user/logout");
-
-                // Limpia el estado de autenticación en localStorage
-                localStorage.removeItem('isAuthenticated');
-                localStorage.removeItem('token'); // Elimina el token
+                await axios.post("http://localhost:5000/user/logout");
 
                 // Redirige al usuario al login
                 window.location.href = "./login.html"; // Asegúrate de que la ruta sea correcta

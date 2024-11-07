@@ -1,17 +1,9 @@
 const express = require('express');
 const User = require('../models/user.js'); // Asegúrate de que la ruta sea correcta
 const hashPassword = require('./hashPassword.js'); // Importación directa de hashPassword
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser'); // Importa cookie-parser
-const verifyToken = require('../middleware/authenticate.js'); 
-require('dotenv').config(); // Cargar variables de entorno al inicio
 
 const router = express.Router();
-const secret = process.env.JWT_SECRET; // Utiliza JWT_SECRET del archivo .env
-
-// Middleware para parsear cookies
-router.use(cookieParser()); // Agrega este middleware
 
 // Función para verificar la contraseña
 const checkPassword = async (pass, dbpass) => {
@@ -20,33 +12,15 @@ const checkPassword = async (pass, dbpass) => {
     return match; 
 };
 
-// Ruta para validar la sesión
-router.get('/validate', (req, res) => {
-    const token = req.cookies.token;  // O usa req.headers['authorization'] para obtener el token de los headers
-
-    if (!token) {
-        return res.json({ isAuthenticated: false });
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.json({ isAuthenticated: false });
-        }
-        res.json({ isAuthenticated: true, user });
-    });
-});
-
-// Ruta para crear un usuario
+// Ruta para crear un usuario (registro)
 router.post('/', async (req, res) => {
     const { password, email, nombre, apellido } = req.body; // Extraer datos del body
 
-    console.log("COOKIES", req.cookies); // Muestra las cookies en la consola
-
     try {
         // Verificar si el usuario ya existe
-        const existingUser = await User.findOne({ email }); 
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).send("Este email ya está registrado."); // Respuesta si el usuario ya existe
+            return res.status(400).send("Este email ya está registrado.");
         }
 
         // Hashear la contraseña
@@ -62,26 +36,37 @@ router.post('/', async (req, res) => {
 
         await user.save(); // Guardar el usuario en la base de datos
 
-        // Crear el payload para el token
-        const payload = {
-            email: user.email,
-            nombre: user.nombre,
-            apellido: user.apellido,
-            id: user._id.toString(),
-        };
-        
-        // Generar el token
-        const token = jwt.sign(payload, secret, { expiresIn: '24h' });
-        
-        // Configurar la cookie con el token
-        res.cookie('token', token, { httpOnly: true });
-        
-        // Respuesta exitosa con el token
-        res.status(201).send({ message: "Usuario creado correctamente", token });
+        res.status(201).send({ message: "Usuario creado correctamente" });
 
     } catch (error) {
-        console.error(error); // Mostrar error en la consola
-        res.status(500).send("Error al crear el usuario: " + error.message); // Enviar el mensaje de error
+        console.error(error);
+        res.status(500).send("Error al crear el usuario: " + error.message);
+    }
+});
+
+// Ruta para iniciar sesión (login)
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body; // Extraer datos del body
+
+    try {
+        // Verificar si el usuario existe
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).send("Email o contraseña incorrectos.");
+        }
+
+        // Verificar la contraseña
+        const isPasswordValid = await checkPassword(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).send("Email o contraseña incorrectos.");
+        }
+
+        // Si todo está bien, devolver un mensaje de éxito
+        res.status(200).send({ message: "Inicio de sesión exitoso" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al iniciar sesión: " + error.message);
     }
 });
 
@@ -99,7 +84,7 @@ router.get('/', async (req, res) => {
 // Ruta para obtener un usuario por ID, excluyendo la contraseña
 router.get('/:id', async (req, res) => {
     try {
-        console.log("ID recibido en la ruta /:id:", req.params.id); // Muestra el ID recibido en la consola
+        console.log("ID recibido en la ruta /:id:", req.params.id);
         
         const user = await User.findById(req.params.id).select('-contraseña');
         if (!user) return res.status(404).send("Usuario no encontrado");
@@ -132,73 +117,6 @@ router.delete('/:id', async (req, res) => {
         console.log(error);
         res.status(500).send("Error al eliminar el usuario");
     }
-});
-
-// Ruta protegida para obtener datos del usuario autenticado
-router.get('/me', verifyToken, async (req, res) => {
-    try {
-        const userId = req.userId; // ID del usuario desde el token
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        res.json(user);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error del servidor' });
-    }
-});
-
-// Ruta de login
-router.post('/login', async (req, res) => {
-    try {
-        // 1. Buscar el usuario por email
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            return res.status(401).send({ message: 'Usuario o contraseña incorrectos' });
-        }
-
-        // 2. Comparar la contraseña ingresada
-        const match = await bcrypt.compare(req.body.password, user.password);
-        if (!match) {
-            return res.status(401).send({ message: 'Usuario o contraseña incorrectos' });
-        }
-
-        // 3. Si la contraseña es correcta, crear el payload y el token
-        const payload = {
-            email: user.email,
-            nombre: user.nombre,
-            apellido: user.apellido,
-            id: user._id.toString(), // Asegúrate de que esto sea una cadena
-        };
-        
-        const token = jwt.sign(payload, secret, { expiresIn: '24h' });
-
-        // 4. Configurar la cookie con el token y responder con el payload
-        res.cookie('token', token, { httpOnly: true, secure: false }); // Asegúrate de establecer secure: true en producción
-        res.status(200).send(payload); // Envía el payload al cliente
-    } catch (error) {
-        console.error("Error en el proceso de autenticación:", error);
-        res.status(500).send({ message: 'Error en el proceso de autenticación' }); // Cambia a 500 en caso de error en el servidor
-    }
-});
-
-// Ruta para cerrar sesión
-router.post('/logout', (req, res) => {
-    try {
-        // Elimina la cookie con el token
-        res.clearCookie('token');
-        // Devuelve un estado 204 (No Content)
-        res.status(204).send();
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: 'Error al cerrar sesión' });
-    }
-});
-
-// Ruta protegida que requiere autenticación
-router.get('/protected-route', verifyToken, (req, res) => {
-    res.status(200).send(`Bienvenido, ${req.user.nombre}`);
 });
 
 // Exportar el router de usuarios
