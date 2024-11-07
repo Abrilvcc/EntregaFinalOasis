@@ -90,7 +90,7 @@ async function confirmDeleteAlbum() {
 // Eliminar álbum
 async function deleteAlbum(albumId) {
     try {
-        await axios.delete(`/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
+        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}`); // Asegúrate de que esta URL sea correcta
         Swal.fire({
             title: 'Éxito',
             text: 'Álbum eliminado correctamente',
@@ -174,7 +174,7 @@ document.getElementById('addAlbumForm').addEventListener('submit', function (eve
     event.preventDefault();
     const albumData = getInputValues();
 
-    axios.post("http://localhost:5000/albums", albumData)
+    axios.post("https://proyectobandaoasis.onrender.com/albums", albumData)
     .then((response) => {
         // Agregar el álbum a la lista de manera instantánea
         appendAlbum(response.data); // Agrega el álbum a la lista en el index
@@ -227,7 +227,7 @@ function closeAddSongModal() {
 // Función para cargar las canciones de un álbum específico y mostrarlas en el modal
 async function loadAlbumSongs(albumId) {
     try {
-        const response = await axios.get(`http://localhost:5000/albums/${albumId}/canciones`);
+        const response = await axios.get(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones`);
         const songs = response.data;
         const songListElement = document.getElementById("song-list");
 
@@ -292,7 +292,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -325,7 +325,7 @@ async function addSong(event) {
     console.log("Datos de la canción a agregar:", songData); // Registro de los datos de la canción
 
     try {
-        await axios.post(`http://localhost:5000/albums/${currentAlbumId}/canciones`, songData);
+        await axios.post(`https://proyectobandaoasis.onrender.com/albums/${currentAlbumId}/canciones`, songData);
         Swal.fire('Éxito', 'Canción agregada correctamente', 'success').then(() => {
             closeAddSongModal(); // Cierra el modal de agregar canción
             loadAlbumSongs(currentAlbumId); // Recarga las canciones del álbum
@@ -342,7 +342,7 @@ document.getElementById('addSongForm').addEventListener('submit', addSong);
 // Función para eliminar una canción específica
 async function deleteSong(albumId, songId) {
     try {
-        await axios.delete(`http://localhost:5000/albums/${albumId}/canciones/${songId}`);
+        await axios.delete(`https://proyectobandaoasis.onrender.com/albums/${albumId}/canciones/${songId}`);
         Swal.fire({
             title: 'Éxito',
             text: 'Canción eliminada correctamente',
