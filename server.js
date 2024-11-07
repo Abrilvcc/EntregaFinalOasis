@@ -8,13 +8,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authenticate = require('./middleware/authenticate'); // Importa el middleware de autenticación
 
-console.log(process.env.DATABASE_URL); 
+console.log(process.env.DATABASE_URL);
 const app = express();
-const url = process.env.DATABASE_URL; 
+const url = process.env.DATABASE_URL;
+const PORT = process.env.PORT || 5000; // Utiliza el puerto de la variable de entorno o 5000 por defecto
 
 // Middleware para parsear JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "Public"))); 
+app.use(express.static(path.join(__dirname, "Public")));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,13 +26,13 @@ app.use(cors({
 }));
 
 // Rutas
-app.use('/', routes); 
-app.use('/user', authenticate, userRoutes); 
+app.use('/', routes);
+app.use('/user', authenticate, userRoutes);
 app.use('/user', userRoutes);
 
 // Ruta de salud
 app.use("/health", (req, res) => {
-    res.sendStatus(200); 
+    res.sendStatus(200);
 });
 
 // Conectar a MongoDB
@@ -45,6 +46,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Algo salió mal!');
 });
 
-// No es necesario llamar a `connectToMongo()`, ya que la conexión está hecha directamente arriba
-// Eliminar la siguiente línea:
-// connectToMongo();
+// Iniciar el servidor en el puerto especificado
+app.listen(PORT, () => {
+    console.log(`Servidor en funcionamiento en el puerto ${PORT} y escuchando DB`);
+});
