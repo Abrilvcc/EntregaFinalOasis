@@ -1,7 +1,7 @@
 // Verificar si el usuario está logueado
 async function checkLoginStatus() {
     try {
-        const response = await axios.get('http://localhost:5000/user/validates', { withCredentials: true });
+        const response = await axios.get('https://proyectobandaoasis.onrender.com/user/validates', { withCredentials: true });
 
         // Si el usuario está logueado
         if (response.status === 200 && response.data.isLoggedIn) {
@@ -20,7 +20,7 @@ async function checkLoginStatus() {
 // Función para cerrar sesión
 document.getElementById('logout-button')?.addEventListener('click', async () => {
     try {
-        await axios.post('http://localhost:5000/user/logout', {}, { withCredentials: true });
+        await axios.post('https://proyectobandaoasis.onrender.com/user/logout', {}, { withCredentials: true });
         // Después de cerrar sesión, recargar la página para actualizar el estado
         window.location.reload();
     } catch (error) {

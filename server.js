@@ -18,10 +18,12 @@ app.use(express.static(path.join(__dirname, "Public")));
 app.use(cookieParser());
 
 // CORS para permitir solicitudes de ciertos orígenes
-const allowedOrigins = ['http://localhost:5000'];
+// CORS para permitir solicitudes de ciertos orígenes
+const allowedOrigins = ['http://localhost:5000', 'https://proyectobandaoasis.onrender.com'];
 
 app.use(cors({
     origin: function (origin, callback) {
+        // Permite el origen de localhost y Render
         if (allowedOrigins.includes(origin) || !origin) {
             callback(null, true);
         } else {
@@ -30,6 +32,8 @@ app.use(cors({
     },
     credentials: true,  // Permite el envío de cookies
 }));
+
+
 
 
 // Rutas principales

@@ -16,6 +16,7 @@ const checkPassword = async (pass, dbpass) => {
     console.log('RESULTADO MATCH', match);
     return match;
 };
+
 // Ruta para verificar si el usuario está logueado mediante el token
 router.get('/validates', verifyToken, async (req, res) => {
     try {
@@ -38,6 +39,7 @@ router.get('/validates', verifyToken, async (req, res) => {
         return res.status(500).json({ message: 'Error al obtener el usuario' });
     }
 });
+
 // Ruta para crear un usuario (registro)
 router.post('/', async (req, res) => {
     const { password, email, nombre, apellido } = req.body;
@@ -70,7 +72,7 @@ router.post('/', async (req, res) => {
         // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,  // Cambia a 'true' si usas HTTPS en producción
+            secure: process.env.NODE_ENV === 'production',  // Usar 'true' solo en producción
             sameSite: 'None',  // Asegura que la cookie se envíe entre dominios
             maxAge: 24 * 60 * 60 * 1000,  // 1 día
         });
@@ -112,8 +114,9 @@ router.post('/login', async (req, res) => {
         // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',  // Usar secure solo en producción
-            maxAge: 24 * 60 * 60 * 1000,  // 24 horas
+            secure: process.env.NODE_ENV === 'production',  // Usar 'secure' solo en producción
+            sameSite: 'None',  // Asegura que la cookie se envíe entre dominios
+            maxAge: 24 * 60 * 60 * 1000,  // 1 día
         });
 
         res.status(200).send({ message: "Inicio de sesión exitoso" });
@@ -159,16 +162,11 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// Ruta para verificar si el usuario está logueado mediante el token
-
-
-
 // Ruta para cerrar sesión
 router.post('/logout', (req, res) => {
     res.clearCookie('token'); // Elimina la cookie del token
     res.json({ message: "Sesión cerrada correctamente" });
 });
-
 
 // Exportar el router de usuarios
 module.exports = router;

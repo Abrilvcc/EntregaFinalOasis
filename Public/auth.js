@@ -6,7 +6,7 @@ const logoutButton = document.getElementById('logout-button');
 // Verificar si el usuario está logueado
 async function checkIfLoggedIn() {
   try {
-    const response = await axios.get('http://localhost:5000/user/validates', { withCredentials: true });
+    const response = await axios.get('https://proyectobandaoasis.onrender.com/user/validates', { withCredentials: true });
 
     if (response.status === 200 && response.data.isLoggedIn) {
       // Ocultar login y registro, mostrar logout
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', checkIfLoggedIn);
 logoutButton.addEventListener('click', async (event) => {
   event.preventDefault(); // Prevenir la redirección
   try {
-    await axios.post('http://localhost:5000/user/logout', {}, { withCredentials: true });
+    await axios.post('https://proyectobandaoasis.onrender.com/user/logout', {}, { withCredentials: true });
     // Después de cerrar sesión, actualizamos la interfaz
     loginLink.classList.remove('hidden');
     registerLink.classList.remove('hidden');
