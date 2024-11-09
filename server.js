@@ -6,6 +6,7 @@ const userRoutes = require('./routes/user');
 const path = require("path");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken'); // Agregar jsonwebtoken
 const app = express();
 const PORT = process.env.PORT || 5000; // Utiliza el puerto de la variable de entorno o 5000 por defecto
 
@@ -18,12 +19,10 @@ app.use(express.static(path.join(__dirname, "Public")));
 app.use(cookieParser());
 
 // CORS para permitir solicitudes de ciertos orígenes
-// CORS para permitir solicitudes de ciertos orígenes
 const allowedOrigins = ['http://localhost:5000', 'https://proyectobandaoasis.onrender.com'];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Permite el origen de localhost y Render
         if (allowedOrigins.includes(origin) || !origin) {
             callback(null, true);
         } else {
@@ -33,8 +32,24 @@ app.use(cors({
     credentials: true,  // Permite el envío de cookies
 }));
 
+// Ruta para obtener la información del usuario logueado
+app.get('/me', (req, res) => {
+  try {
+    const token = req.cookies.token;  // Obtener el token de las cookies
+    if (!token) {
+      return res.status(401).send('No token provided');  // Si no existe el token, devuelve error 401
+    }
 
-
+    // Verificar el token utilizando la clave secreta del entorno
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Si el token es válido, enviamos la información del usuario
+    res.status(200).send(payload);
+  } catch (error) {
+    // Si hay un error en la verificación o el token es inválido
+    res.status(401).send('Unauthorized');
+  }
+});
 
 // Rutas principales
 app.use('/', routes);

@@ -1,9 +1,30 @@
+// Función para obtener el token desde las cookies
+function getTokenFromCookies() {
+    const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token='))
+        ?.split('=')[1];
+    return token ? decodeURIComponent(token) : null;
+}
+
+
 // Elementos del DOM
 const albumListElement = document.getElementById("album-list");
 const albumTitleElement = document.getElementById("album-title");
 const albumDescriptionElement = document.getElementById("album-description");
 const albumImageElement = document.getElementById("album-image");
 let currentAlbumId; // Variable para almacenar el ID del álbum actual
+
+// Configurar Axios para incluir el token en las solicitudes automáticamente
+axios.interceptors.request.use((config) => {
+    const token = getTokenFromCookies();
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 // Cargar los álbumes desde el servidor
 async function loadAlbums() {

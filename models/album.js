@@ -27,7 +27,7 @@ const albumSchema = new mongoose.Schema({
     fechaDeLanzamiento: {
         type: Number,
     },
-    
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     canciones: [cancionSchema] // Usa el esquema de canción aquí
 });
 
