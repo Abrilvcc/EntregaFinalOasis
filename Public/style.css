@@ -35,3 +35,7 @@ header p {
   font-size: 1.125rem;
   color: #d1d5db; /* Color gris claro para el subtítulo */
 }
+
+.hidden {
+  display: none;
+}
