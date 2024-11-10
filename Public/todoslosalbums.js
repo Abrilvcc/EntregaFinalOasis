@@ -7,7 +7,6 @@ function getTokenFromCookies() {
     return token ? decodeURIComponent(token) : null;
 }
 
-
 // Elementos del DOM
 const albumListElement = document.getElementById("album-list");
 const albumTitleElement = document.getElementById("album-title");
@@ -190,7 +189,6 @@ function getInputValues() {
 }
 
 // Función para agregar un álbum
-// Función para agregar un álbum
 document.getElementById('addAlbumForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const albumData = getInputValues();
@@ -224,7 +222,6 @@ function appendAlbum(album) {
     albumListElement.appendChild(listItem);
 }
 
-
 // Función para renderizar álbumes
 function renderAlbums(albums) {
     albumListElement.innerHTML = ''; // Limpiar la lista antes de agregar nuevos álbumes
@@ -242,8 +239,11 @@ function openAddSongModal() {
 // Cierra el modal de añadir canción
 function closeAddSongModal() {
     const addSongModal = document.getElementById('addSongModal');
-    if (addSongModal) addSongModal.close();
+    addSongModal.close();
 }
 
-// Inicializar la página
-window.onload = loadAlbums;
+// Inicializar al cargar
+document.addEventListener("DOMContentLoaded", () => {
+    loadAlbums(); // Carga los álbumes al cargar la página
+});
+
