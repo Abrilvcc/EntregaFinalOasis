@@ -1,46 +1,59 @@
-// auth.js
-const loginLink = document.getElementById('login-link');
-const registerLink = document.getElementById('register-link');
-const logoutButton = document.getElementById('logout-button');
-
-// Verificar si el usuario está logueado
-async function checkIfLoggedIn() {
-  try {
-    const response = await axios.get('https://proyectobandaoasis.onrender.com/user/validates', { withCredentials: true });
-
-    if (response.status === 200 && response.data.isLoggedIn) {
-      // Ocultar login y registro, mostrar logout
-      loginLink.classList.add('hidden'); // Ocultar el botón de login
-      registerLink.classList.add('hidden'); // Ocultar el botón de registro
-      logoutButton.classList.remove('hidden'); // Mostrar el botón de logout
-    } else {
-      // Mostrar login y registro, ocultar logout
-      loginLink.classList.remove('hidden'); // Mostrar el botón de login
-      registerLink.classList.remove('hidden'); // Mostrar el botón de registro
-      logoutButton.classList.add('hidden'); // Ocultar el botón de logout
+document.addEventListener('DOMContentLoaded', () => {
+    // Obtener los botones
+    const loginButton = document.getElementById('login-button');
+    const registerButton = document.getElementById('register-button');
+    const profileButton = document.getElementById('profile-button');
+    const logoutButton = document.getElementById('logout-button');
+  
+    // Función para verificar si el usuario está logueado
+    async function checkIfLoggedIn() {
+        try {
+            // Verifica si hay un token de sesión válido (puedes cambiar la verificación según tu implementación)
+            const response = await fetch('https://proyectobandaoasis.onrender.com//user/validates', {
+                method: 'GET',
+                credentials: 'include', // Incluye las credenciales (cookies, etc)
+            });
+            
+            const data = await response.json();
+            if (response.status === 200 && data.isLoggedIn) {
+                // Si el usuario está logueado
+                loginButton.classList.add('hidden');
+                registerButton.classList.add('hidden');
+                profileButton.classList.remove('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                // Si el usuario no está logueado
+                loginButton.classList.remove('hidden');
+                registerButton.classList.remove('hidden');
+                profileButton.classList.add('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error al verificar el estado de la sesión:', error);
+            // En caso de error, mostramos los botones de login y registro
+            loginButton.classList.remove('hidden');
+            registerButton.classList.remove('hidden');
+            profileButton.classList.add('hidden');
+            logoutButton.classList.add('hidden');
+        }
     }
-  } catch (error) {
-    console.error("Error al verificar el estado de la sesión:", error);
-    // Si ocurre un error, consideramos que el usuario no está logueado
-    loginLink.classList.remove('hidden'); // Mostrar el botón de login
-    registerLink.classList.remove('hidden'); // Mostrar el botón de registro
-    logoutButton.classList.add('hidden'); // Ocultar el botón de logout
-  }
-}
 
-// Llamar a la función cuando la página se haya cargado
-document.addEventListener('DOMContentLoaded', checkIfLoggedIn);
+    // Función de logout
+    logoutButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        try {
+            // Llamada al backend para cerrar sesión
+            await fetch('https://proyectobandaoasis.onrender.com//user/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+            // Una vez logueado, recargamos la barra de navegación
+            checkIfLoggedIn();
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
+    });
 
-// Funcionalidad para cerrar sesión
-logoutButton.addEventListener('click', async (event) => {
-  event.preventDefault(); // Prevenir la redirección
-  try {
-    await axios.post('https://proyectobandaoasis.onrender.com/user/logout', {}, { withCredentials: true });
-    // Después de cerrar sesión, actualizamos la interfaz
-    loginLink.classList.remove('hidden');
-    registerLink.classList.remove('hidden');
-    logoutButton.classList.add('hidden');
-  } catch (error) {
-    console.error("Error al cerrar sesión:", error);
-  }
+    // Llamamos a la función para verificar el estado de la sesión al cargar la página
+    checkIfLoggedIn();
 });

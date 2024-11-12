@@ -23,9 +23,21 @@
             <li><a href="https://oasisinet.com/" class="text-gray-400 hover:text-purple-400">Noticias</a></li>
         </ul>
         <ul class="flex space-x-4">
-            <a id="login-link" href="Login.html" class="text-white hover:text-purple-400 mr-4">Login</a>
-            <a id="register-link" href="signUp.html" class="text-white hover:text-purple-400">Registrar</a>
-            <button id="logout-button" class="text-white hover:text-purple-400 hidden">Logout</button>
+            <div class="flex items-center">
+                <button id="login-button" onclick="window.location.href='Login.html'" class="text-white hover:text-purple-400 mr-4">Login</button>
+        
+                <!-- Botón Registrar -->
+                <button id="register-button" onclick="window.location.href='signUp.html'" class="text-white hover:text-purple-400 mr-4">Registrar</button>
+                
+                <!-- Botón Mi Perfil (oculto inicialmente) -->
+                <button id="profile-button" onclick="window.location.href='miperfil.html'" class="text-white hover:text-purple-400 hidden">Mi Perfil</button>
+                
+                <!-- Botón Logout (oculto inicialmente) -->
+                <button id="logout-button" onclick="logout()" class="text-white hover:text-purple-400 hidden ml-4">Logout</button>
+            </div>
+        </nav>
+            <button id="profile-link" onclick="window.location.href='miperfil.html'" class="text-white hover:text-purple-400 hidden">Mi Perfil</button>
+    <button id="logout-button" class="text-white hover:text-purple-400 hidden ml-4">Logout</button>
         </ul>
     </nav>
 

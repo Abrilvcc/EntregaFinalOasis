@@ -1,44 +1,16 @@
 const express = require('express');
-const User = require('../models/user.js');
-const hashPassword = require('./hashPassword.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user'); // Asegúrate de que el modelo esté correctamente definido
+const verifyToken = require('../middlewares/verifyToken'); // Middleware para verificar el token
+const hashPassword = require('./hashPassword'); // Si tienes una función para hashear contraseñas
 const router = express.Router();
-const cookieParser = require('cookie-parser');
-const verifyToken = require('../middlewares/verifyToken');  // Asegúrate de importar el middleware verifyToken
-
-const app = express();
-app.use(cookieParser());  // Asegúrate de que cookie-parser esté configurado globalmente
 
 // Función para verificar la contraseña
 const checkPassword = async (pass, dbpass) => {
     const match = await bcrypt.compare(pass, dbpass);
-    console.log('RESULTADO MATCH', match);
     return match;
 };
-
-// Ruta para verificar si el usuario está logueado mediante el token
-router.get('/validates', verifyToken, async (req, res) => {
-    try {
-        // Verifica que req.user tiene un valor y que contiene un ID
-        console.log("Token validado, req.user:", req.user);
-
-        // Si el token es válido, `req.user` tendrá la información del usuario decodificada
-        const user = await User.findById(req.user.id).select('-password');
-        console.log("Usuario encontrado:", user);
-
-        if (!user) {
-            console.log("Usuario no encontrado");
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        // Si el usuario existe, devolver la información del usuario y estado de login
-        return res.status(200).json({ isLoggedIn: true, user });
-    } catch (error) {
-        console.error('Error al obtener el usuario:', error.message);
-        return res.status(500).json({ message: 'Error al obtener el usuario' });
-    }
-});
 
 // Ruta para crear un usuario (registro)
 router.post('/', async (req, res) => {
@@ -52,7 +24,7 @@ router.post('/', async (req, res) => {
 
         const hashedPassword = await hashPassword(password);
 
-        const user = new User({ 
+        const user = new User({
             nombre,
             apellido,
             email,
@@ -69,18 +41,14 @@ router.post('/', async (req, res) => {
         };
         const token = jwt.sign(payLoad, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-        // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',  // Usar 'true' solo en producción
-            sameSite: 'None',  // Asegura que la cookie se envíe entre dominios
-            maxAge: 24 * 60 * 60 * 1000,  // 1 día
+            secure: true, // Asegúrate de usar HTTPS en producción (Render lo maneja automáticamente)
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
-        res.status(201).send({ 
-            message: "Usuario creado correctamente",
-            token 
-        });
+        res.status(201).send({ message: "Usuario creado correctamente", token });
 
     } catch (error) {
         console.error(error);
@@ -111,12 +79,11 @@ router.post('/login', async (req, res) => {
         };
         const token = jwt.sign(payLoad, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-        // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',  // Usar 'secure' solo en producción
-            sameSite: 'None',  // Asegura que la cookie se envíe entre dominios
-            maxAge: 24 * 60 * 60 * 1000,  // 1 día
+            secure: true,
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         res.status(200).send({ message: "Inicio de sesión exitoso" });
@@ -127,46 +94,66 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Ruta para obtener todos los usuarios (protegida)
-router.get('/', async (req, res) => {
+// Ruta para verificar si el usuario está logueado mediante el token
+router.get('/validates', verifyToken, async (req, res) => {
     try {
-        const users = await User.find().select('-contraseña');
-        res.status(200).send(users);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Error al cargar los usuarios");
-    }
-});
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
 
-// Ruta para obtener un usuario por ID (protegida)
-router.get('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).select('-contraseña');
-        if (!user) return res.status(404).send("Usuario no encontrado");
-        res.status(200).send(user);
+        return res.status(200).json({ isLoggedIn: true, user });
     } catch (error) {
-        console.log(error);
-        res.status(500).send("Error al obtener el usuario");
-    }
-});
-
-// Ruta para eliminar un usuario por ID
-router.delete('/:id', async (req, res) => {
-    try {
-        const deletedUser = await User.findByIdAndDelete(req.params.id);
-        if (!deletedUser) return res.status(404).send("Usuario no encontrado");
-        res.status(200).send("Usuario eliminado correctamente");
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Error al eliminar el usuario");
+        res.status(500).json({ message: 'Error al obtener el usuario' });
     }
 });
 
 // Ruta para cerrar sesión
 router.post('/logout', (req, res) => {
-    res.clearCookie('token'); // Elimina la cookie del token
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+    });
     res.json({ message: "Sesión cerrada correctamente" });
 });
 
-// Exportar el router de usuarios
+// Ruta para actualizar el perfil del usuario
+router.post('/actualizarPerfil', verifyToken, async (req, res) => {
+    const { nombre, imagen } = req.body;
+
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ error: 'No autorizado' });
+        }
+
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const usuarioId = decodedToken.id;
+
+        const usuario = await User.findById(usuarioId);
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        usuario.nombre = nombre || usuario.nombre;
+        usuario.imagen = imagen || usuario.imagen;
+
+        await usuario.save();
+
+        const nuevoToken = jwt.sign(
+            { id: usuario.id, username: usuario.nombre, userImage: usuario.imagen },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.cookie('token', nuevoToken, { httpOnly: true, secure: true });
+
+        res.json({ success: true, message: 'Perfil actualizado con éxito' });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Hubo un error al actualizar el perfil' });
+    }
+});
+
 module.exports = router;

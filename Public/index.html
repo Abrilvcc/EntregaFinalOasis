@@ -41,16 +41,25 @@
     
   <!-- Barra superior de navegación -->
   <!-- Barra superior de navegación -->
-<nav class="bg-gray-900 py-4 flex justify-between items-center px-6">
+  <nav class="bg-gray-900 py-4 flex justify-between items-center px-6">
     <div class="flex-grow">
         <h1 class="text-5xl font-bold text-purple-500">OASIS</h1>
     </div>
     <div class="flex items-center">
-        <a id="login-link" href="Login.html" class="text-white hover:text-purple-400 mr-4">Login</a>
-        <a id="register-link" href="signUp.html" class="text-white hover:text-purple-400">Registrar</a>
-        <button id="logout-button" class="text-white hover:text-purple-400 hidden">Logout</button>
+        <!-- Botón Login -->
+        <button id="login-button" onclick="window.location.href='Login.html'" class="text-white hover:text-purple-400 mr-4">Login</button>
+        
+        <!-- Botón Registrar -->
+        <button id="register-button" onclick="window.location.href='signUp.html'" class="text-white hover:text-purple-400 mr-4">Registrar</button>
+        
+        <!-- Botón Mi Perfil (oculto inicialmente) -->
+        <button id="profile-button" onclick="window.location.href='miperfil.html'" class="text-white hover:text-purple-400 hidden">Mi Perfil</button>
+        
+        <!-- Botón Logout (oculto inicialmente) -->
+        <button id="logout-button" onclick="logout()" class="text-white hover:text-purple-400 hidden ml-4">Logout</button>
     </div>
 </nav>
+
 
 
 
@@ -170,7 +179,8 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="auth.js" defer></script>
-    <script src="index.js"></script>
+    
+   
 
 
 </body>

@@ -30,7 +30,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-  
+    nombreDeUsuario: {
+        type: String,
+        required: true,
+        unique: true, // El nombre de usuario debe ser único
+    },
+    imagenPerfil: {
+        type: String,
+        default: 'liamandnoel.jpg', // Puede ser una URL de imagen o dejarlo vacío
+    }
 });
 
 // Crear el modelo de Usuario
