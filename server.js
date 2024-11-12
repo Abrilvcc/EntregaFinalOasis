@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const userRoutes = require('./routes/user');
+const albumRoutes = require('./routes/album');
+
 const path = require("path");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -55,7 +57,7 @@ app.get('/me', (req, res) => {
 // Rutas principales
 app.use('/', routes);
 app.use('/user', userRoutes);
-
+app.use('/albums', albumRoutes); 
 // Ruta de salud
 app.get("/health", (req, res) => {
     res.sendStatus(200);
