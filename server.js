@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "Public")));
 app.use(cookieParser());
 
 // Configuración de CORS para permitir solicitudes de ciertos orígenes
-const allowedOrigins = ['http://localhost:5000', 'https://proyectobandaoasis.onrender.com'];
+const allowedOrigins = ['https://proyectobandaoasis.onrender.com'];
 
 app.use(cors({
     origin: function (origin, callback) {
