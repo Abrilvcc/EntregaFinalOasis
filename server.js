@@ -18,15 +18,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "Public")));
 app.use(cookieParser());
 
-// CORS para permitir solicitudes de ciertos orígenes
+// Configuración de CORS para permitir solicitudes de ciertos orígenes
 const allowedOrigins = ['http://localhost:5000', 'https://proyectobandaoasis.onrender.com'];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (allowedOrigins.includes(origin) || !origin) {
+        // Permitir solicitudes de orígenes permitidos o solicitudes sin origen (por ejemplo, desde el mismo servidor en producción)
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            callback(new Error('No permitido por CORS'));
         }
     },
     credentials: true,  // Permite el envío de cookies
@@ -34,21 +35,21 @@ app.use(cors({
 
 // Ruta para obtener la información del usuario logueado
 app.get('/me', (req, res) => {
-  try {
-    const token = req.cookies.token;  // Obtener el token de las cookies
-    if (!token) {
-      return res.status(401).send('No token provided');  // Si no existe el token, devuelve error 401
-    }
+    try {
+        const token = req.cookies.token;  // Obtener el token de las cookies
+        if (!token) {
+            return res.status(401).send('No se proporcionó un token');  // Si no existe el token, devuelve error 401
+        }
 
-    // Verificar el token utilizando la clave secreta del entorno
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    
-    // Si el token es válido, enviamos la información del usuario
-    res.status(200).send(payload);
-  } catch (error) {
-    // Si hay un error en la verificación o el token es inválido
-    res.status(401).send('Unauthorized');
-  }
+        // Verificar el token utilizando la clave secreta del entorno
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Si el token es válido, enviamos la información del usuario
+        res.status(200).send(payload);
+    } catch (error) {
+        // Si hay un error en la verificación o el token es inválido
+        res.status(401).send('No autorizado');
+    }
 });
 
 // Rutas principales
