@@ -27,7 +27,7 @@ document.getElementById('perfilForm').addEventListener('submit', async function 
 
     try {
         // Enviar la solicitud al backend para actualizar el perfil
-        const response = await fetch('http://localhost:5000/user/updateProfile', {
+        const response = await fetch('https://proyectobandaoasis.onrender.com/user/updateProfile', {
             method: 'PUT', // O 'POST' dependiendo de la lógica de tu backend
             headers: {
                 'Content-Type': 'application/json',

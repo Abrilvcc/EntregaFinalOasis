@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkIfLoggedIn() {
         try {
             // Verifica si hay un token de sesión válido (puedes cambiar la verificación según tu implementación)
-            const response = await fetch('https://proyectobandaoasis.onrender.com//user/validates', {
+            const response = await fetch('https://proyectobandaoasis.onrender.com/user/validates', {
                 method: 'GET',
                 credentials: 'include', // Incluye las credenciales (cookies, etc)
             });
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         try {
             // Llamada al backend para cerrar sesión
-            await fetch('https://proyectobandaoasis.onrender.com//user/logout', {
+            await fetch('https://proyectobandaoasis.onrender.com/user/logout', {
                 method: 'POST',
                 credentials: 'include',
             });
